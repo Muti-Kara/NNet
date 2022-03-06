@@ -14,7 +14,7 @@ public class MatrixTools {
 	public static Matrix func(Matrix matrix){
 		for(int r = 0; r < matrix.getRow(); r++) {
 			for(int c = 0; c < matrix.getCol(); c++) {
-				matrix.set(r, c, Math.max(0, matrix.get(r, c))); 
+				matrix.set(r, c, Math.max(0.5*(Math.exp(matrix.get(r, c)) - 1), matrix.get(r, c))); 
 			}
 		}
 		return matrix;
@@ -28,7 +28,7 @@ public class MatrixTools {
 	public static Matrix d_func(Matrix matrix) {
 		for(int r = 0; r < matrix.getRow(); r++) {
 			for(int c = 0; c < matrix.getCol(); c++) {
-				matrix.set(r, c, (matrix.get(r, c) <= 0)? 0 : 1);
+				matrix.set(r, c, (matrix.get(r, c) <= 0)? matrix.get(r, c) + 0.5 : 1);
 			}
 		}
 		return matrix;
@@ -64,5 +64,18 @@ public class MatrixTools {
 			}
 		}
 		return sum / 2;
+	}
+	
+	public static Matrix flatten(Matrix[] matArray){
+		Matrix vector = new Matrix(matArray.length * matArray[0].getRow() * matArray[0].getCol(), 1);
+		int k = 0;
+		for(int i = 0; i < matArray.length; i++){
+			for(int r = 0; r < matArray[i].getRow(); r++){
+				for(int c = 0; c < matArray[i].getCol(); c++){
+					vector.set(k++, 0, matArray[i].get(r, c));
+				}
+			}
+		}
+		return vector;
 	}
 }

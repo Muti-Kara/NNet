@@ -11,12 +11,57 @@ public class Matrix {
 	double[][] matrix;
 	int col, row;
 	
+	/**
+	* Creates a zero matrix.
+	* @param row
+	* @param col
+	 */
 	public Matrix(int row, int col) {
 		matrix = new double[row][col];
 		this.col = col;
 		this.row = row;		
 	}
 	
+	/**
+	* Sets the double value at given row and column.
+	* @param row
+	* @param col
+	* @param value
+	 */
+	public void set(int row, int col, double value){
+		matrix[row][col] = value;
+	}
+	
+	/**
+	* 
+	* @param row
+	* @param col
+	* @return element at (row, col)
+	 */
+	public double get(int row, int col){
+		return matrix[row][col];
+	}
+	
+	/**
+	* 
+	* @return number of columns.
+	 */
+	public int getCol() {
+		return col;
+	}
+
+	/**
+	* 
+	* @return number of rows.
+	 */
+	public int getRow() {
+		return row;
+	}
+
+	/**
+	* 
+	* @return randomly fills the matrix.
+	 */
 	public Matrix randomize() {
 		for(int r = 0; r < row; r++)
 			for(int c = 0; c < col; c++)
@@ -24,6 +69,17 @@ public class Matrix {
 		return this;
 	}
 	
+	public Matrix randomize(double d) {
+		for(int r = 0; r < row; r++)
+			for(int c = 0; c < col; c++)
+				matrix[r][c] = rand.nextGaussian() * d;
+		return this;
+	}
+	
+	/**
+	* 
+	* @return clones the matrix.
+	 */
 	public Matrix createClone() {
 		Matrix C = new Matrix(row, col);
 		for(int r = 0; r < row; r++) {
@@ -32,14 +88,24 @@ public class Matrix {
 		return C;
 	}
 	
-	public Matrix getVector(int c) {
+	/**
+	* 
+	* @param row
+	* @return the row of matrix as a vector.
+	 */
+	public Matrix getVector(int row) {
 		Matrix C = new Matrix(col, 1);
 		for(int r = 0; r < C.row; r++) {
-			C.matrix[r][0] = matrix[c][r];
+			C.matrix[r][0] = matrix[row][r];
 		}
 		return C;
 	}
 	
+	/**
+	* 
+	* @param B
+	* @return dot product of matrices.
+	 */
 	public Matrix dot(Matrix B) {
 		if(this.col != B.row) {
 			System.out.println("Matrix dot error. Size Mismatch :" + col + " " + B.row);
@@ -71,26 +137,6 @@ public class Matrix {
 		return this;
 	}
 	
-	public double[][] getMatrix() {
-		return matrix;
-	}
-
-	public void set(int r, int c, double value){
-		matrix[r][c] = value;
-	}
-	
-	public double get(int r, int c){
-		return matrix[r][c];
-	}
-	
-	public int getCol() {
-		return col;
-	}
-
-	public int getRow() {
-		return row;
-	}
-
 	public Matrix sub(Matrix B) {
 		if(!(row == B.row && col == B.col)) {
 			System.out.println("Matrix sub error. Size Mismatch.");

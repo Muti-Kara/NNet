@@ -20,6 +20,18 @@ public class FullyConnected {
 		weight = new Matrix(other.weight.getRow(), other.weight.getCol());
 		bias = new Matrix(other.bias.getRow(), other.bias.getCol());
 	}
+	
+	public Matrix goForward(Matrix input, boolean softmax){
+		if(softmax)
+			return MatrixTools.softmax(weight.dot(input).sum(bias));
+		else
+			return MatrixTools.func(weight.dot(input).sum(bias));
+	}
+	
+	public void sub(FullyConnected other){
+		weight.sub(other.getWeight().sProd(learningRate));
+		bias.sub(other.getBias().sProd(learningRate));
+	}
 
 	public double getLearningrate() {
 		return learningRate;
@@ -49,18 +61,6 @@ public class FullyConnected {
 		this.bias = bias;
 	}
 
-	public Matrix goForward(Matrix input, boolean softmax){
-		if(softmax)
-			return MatrixTools.softmax(weight.dot(input).sum(bias));
-		else
-			return MatrixTools.func(weight.dot(input).sum(bias));
-	}
-	
-	public void sub(FullyConnected other){
-		weight.sub(other.getWeight().sProd(learningRate));
-		bias.sub(other.getBias().sProd(learningRate));
-	}
-	
 	@Override
 	public String toString() {
 		return "\tWeights:\n" + weight + "\tBiases:\n" + bias;

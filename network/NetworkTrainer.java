@@ -19,6 +19,7 @@ public class NetworkTrainer {
 	NeuralNet net;
 	Matrix input;
 	Matrix answer;
+	InputData data;
 	
 	public NetworkTrainer(NeuralNet net){
 		this.net = net;
@@ -28,9 +29,8 @@ public class NetworkTrainer {
 	}
 	
 	public void train(InputData data){
+		this.data = data;
 		int epoch = HyperParameters.EPOCH;
-		input = data.getInputs();
-		answer = data.getAnswers();
 		while(epoch-->0){
 			double crossEntropy = 0;
 			for(int i = 0; i < dataSize; i++){
@@ -39,24 +39,27 @@ public class NetworkTrainer {
 				calculateLoss();
 				calculateChanges();
 			}
-			if(epoch < 1)
-				System.out.printf("%.8f\n", crossEntropy);
+			// if(epoch < 1)
+			System.out.printf("Epoch %d:\t%.8f\n", epoch, crossEntropy);
+			if(Double.isNaN(crossEntropy))
+				return;
 			applyChanges();
 		}
 	}
 	
 	public void forwardPropagate(int i) {
-		activation[0] = input.getVector(i);
+		activation[0] = data.getInputs()[i];
 		for(int j = 1; j < length; j++){
 			activation[j] = net.layers[j].goForward(activation[j-1], j == length - 1);
 		}
 	}
 	
 	public double calculateError(int i) {
-		Matrix ithAnswer = answer.getVector(i);
+		Matrix ithAnswer = data.getAnswers().getVector(i);
 		double crossEntropy = 0;
 		for(int j = 0; j < ithAnswer.getRow(); j++){
 			crossEntropy -= ithAnswer.get(j, 0) * Math.log(activation[length - 1].get(j, 0));
+			// System.out.println(activation[length - 1].get(j, 0));
 		}
 		errors[length - 1] = activation[length - 1].sub(ithAnswer);
 		return crossEntropy;

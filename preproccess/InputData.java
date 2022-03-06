@@ -1,45 +1,39 @@
 package preproccess;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
-import algebra.HyperParameters;
 import algebra.Matrix;
 
 /**
 * InputData
 */
 public class InputData {
-	int[] structure = HyperParameters.structure;
-	int dataSize = HyperParameters.DATA_SIZE;
-	int testSize = HyperParameters.TEST_SIZE;
+	Matrix[] inputs;
+	Matrix answers;
 	
-	Matrix inputs = new Matrix(dataSize, structure[0]);
-	Matrix answers = new Matrix(dataSize, structure[structure.length - 1]);
+	Matrix[] asked;
+	Matrix expected;
 	
-	Matrix asked = new Matrix(testSize, structure[0]);
-	Matrix expected = new Matrix(testSize, structure[structure.length - 1]);
+	public InputData(Matrix[] inputs, Matrix[] asked, Matrix answers, Matrix expected) {
+		this.inputs = inputs;
+		this.asked = asked;
+		this.answers = answers;
+		this.expected = expected;
+		scale(inputs);
+		scale(asked);
+	}
 	
-	public InputData(String fileName) throws FileNotFoundException{
-		Scanner scan = new Scanner(new File(HyperParameters.projectDir + fileName));
-		
-		for(int i = 0; i < dataSize; i++){
-			for(int j = 0; j < structure[0]; j++)
-				inputs.set(i, j, scan.nextDouble());
-			for(int j = 0; j < structure[structure.length - 1]; j++)
-				answers.set(i, j, scan.nextDouble());
-		}
-		
-		for(int i = 0; i < testSize; i++){
-			for(int j = 0; j < structure[0]; j++)
-				asked.set(i, j, scan.nextDouble());
-			for(int j = 0; j < structure[structure.length - 1]; j++)
-				expected.set(i, j, scan.nextDouble());
+	public void scale(Matrix[] matrix){
+		for(int i = 0; i < matrix.length; i++){
+			double min = 1e4;
+			for(int j = 0; j < matrix[i].getRow(); j++){
+				min = Math.min(min, matrix[i].get(j, 0));
+			}
+			for(int j = 0; j < matrix[i].getRow(); j++){
+				matrix[i].set(j, 0, (matrix[i].get(j, 0) - min));
+			}
 		}
 	}
 	
-	public Matrix getInputs() {
+	public Matrix[] getInputs() {
 		return inputs;
 	}
 	
@@ -47,12 +41,12 @@ public class InputData {
 		return answers;
 	}
 
-	public Matrix getAsked() {
+	public Matrix[] getAsked() {
 		return asked;
 	}
 
 	public Matrix getExpected() {
 		return expected;
 	}
-
+	
 }
