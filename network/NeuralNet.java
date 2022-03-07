@@ -34,4 +34,16 @@ public class NeuralNet {
 	public int getSize(){
 		return structure.length;
 	}
+	
+	@Override
+	public String toString() {
+		String str = "" + structure.length + "\n";
+		for(int i = 0; i < structure.length; i++){
+			str += structure[i] + " ";
+		}
+		for(int i = 1; i < layers.length; i++){
+			str += "\n" + layers[i].toString();
+		}
+		return str;
+	}
 }

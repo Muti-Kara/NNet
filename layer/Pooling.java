@@ -33,4 +33,8 @@ public class Pooling {
 		return ans;
 	}
 	
+	@Override
+	public String toString() {
+		return "\n" + size + "\n";
+	}
 }

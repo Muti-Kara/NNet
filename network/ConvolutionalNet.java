@@ -38,8 +38,14 @@ public class ConvolutionalNet {
 		return MatrixTools.flatten(preOutput);
 	}
 	
-	public void trainCNN() {
-		
+	@Override
+	public String toString() {
+		String str = "";
+		str += convLayers.length + "\n";
+		for(int i = 0; i < convLayers.length; i++){
+			str += convLayers[i].toString() + "\n";
+			str += poolLayers[i].toString();
+		}
+		return str;
 	}
-	
 }

@@ -63,6 +63,6 @@ public class FullyConnected {
 
 	@Override
 	public String toString() {
-		return "\tWeights:\n" + weight + "\tBiases:\n" + bias;
+		return "\n" + weight + "\n" + bias;
 	}
 }

@@ -78,4 +78,18 @@ public class MatrixTools {
 		}
 		return vector;
 	}
+	
+	public static Matrix scale(Matrix matrix){
+		double min = 1e4;
+		for(int j = 0; j < matrix.getRow(); j++){
+			min = Math.min(min, matrix.get(j, 0));
+		}
+		for(int j = 0; j < matrix.getRow(); j++){
+			matrix.set(j, 0, (matrix.get(j, 0) - min));
+		}
+		return matrix;
+	}
 }
+
+
+

@@ -27,10 +27,11 @@ public class ImageBuffer {
 		for(int w = 0; w < width; w++){
 			for(int h = 0; h < height; h++){
 				int p = image.getRGB(w, h);
+				int a = p >> 24 & 0xff;
 				int r = p >> 16 & 0xff;
 				int g = p >> 8 & 0xff;
 				int b = p & 0xff;
-				int avg = (r*3 + g*3 + b)/7;
+				int avg = a * (r + g + b)/3;
 				image.setRGB(w, h, (0xff << 24) | (avg << 16) | (avg << 8) | avg);
 			}
 		}

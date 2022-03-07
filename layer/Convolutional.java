@@ -15,16 +15,13 @@ public class Convolutional {
 	int kernelSize;
 	
 	
-	public Convolutional(int numOfKernels, int kernelSize) throws IOException{
-		FileWriter writer = new FileWriter(HyperParameters.projectDir + "/kernel.txt");
+	public Convolutional(int numOfKernels, int kernelSize) {
 		kernels = new Matrix[numOfKernels];
 		this.kernelSize = kernelSize;
 		for(int i = 0; i < numOfKernels; i++){
 			kernels[i] = new Matrix(kernelSize, kernelSize);
 			kernels[i].randomize(HyperParameters.KERNEL_RANDOMIZATION);
-			writer.append("\nKernel " + (i+1) + ":\n" + kernels[i].toString());
 		}
-		writer.close();
 	}
 	
 	public Matrix[] goForward(Matrix[] input) {
@@ -53,4 +50,12 @@ public class Convolutional {
 		kernels[index] = matrix;
 	}
 	
+	@Override
+	public String toString() {
+		String str = kernelSize + " " + kernels.length + "\n";
+		for(int i = 0; i < kernels.length; i++){
+			str += kernels[i].toString();
+		}
+		return str;
+	}
 }

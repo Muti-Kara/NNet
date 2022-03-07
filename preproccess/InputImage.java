@@ -1,6 +1,8 @@
 package preproccess;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import algebra.HyperParameters;
 import algebra.Matrix;
@@ -9,48 +11,54 @@ import algebra.Matrix;
 * InputImage
 */
 public class InputImage {
-	int dataSize = HyperParameters.DATA_SIZE;
-	int testSize = HyperParameters.TEST_SIZE;
+	int dataSize;
+	int testSize;
 	String projectDir = HyperParameters.projectDir;
 	
-	Matrix[] inputs = new Matrix[dataSize];
-	Matrix[] tests = new Matrix[testSize];
-	Matrix answers = new Matrix(dataSize, HyperParameters.structure[HyperParameters.structure.length - 1]);
-	Matrix expected = new Matrix(testSize, HyperParameters.structure[HyperParameters.structure.length - 1]);
+	Matrix[] inputs;
+	Matrix[] tests;
+	Matrix answers;
+	Matrix expected;
 	
 	public InputImage() throws IOException{
-		for(int i = 0; i < dataSize; i++){
-			ImageBuffer img = new ImageBuffer(projectDir + "/dataset/img" + (i+1) + ".jpeg");
+		HyperParameters.DATA_SIZE = readFolder("dataset", true);
+		HyperParameters.TEST_SIZE = readFolder("tests", false);
+	}
+	
+	public int readFolder(String folderName, boolean isData) throws IOException{
+		ArrayList<String> fileNames = new ArrayList<>();
+		for(char character = 'A'; character != 'F'; character++){
+			File[] files = new File(projectDir + "/" + folderName + "/" + character).listFiles();
+			for(File file : files){
+				if(file.isFile())
+					fileNames.add(file.getName() + " " + character);
+			}
+		}
+		if(isData){
+			inputs = new Matrix[fileNames.size()];
+			answers = new Matrix(fileNames.size(), HyperParameters.structure[HyperParameters.structure.length - 1]);
+		}else{
+			tests = new Matrix[fileNames.size()];
+			expected = new Matrix(fileNames.size(), HyperParameters.structure[HyperParameters.structure.length - 1]);
+		}
+		for(int i = 0; i < fileNames.size(); i++){
+			String file = fileNames.get(i).substring(0, fileNames.get(i).length() - 2);
+			char character = fileNames.get(i).charAt(fileNames.get(i).length() - 1);
+			ImageBuffer img = new ImageBuffer(projectDir + "/" + folderName + "/" + character + "/" + file);
 			img.resize();
 			img.turnBlackAndWhite();
 			img.maximizeContrast();
-			// img.write(HyperParameters.projectDir + "/outputs/imgTrain" + (i+1) + ".jpeg");
-			inputs[i] = img.getMatrix();
-			scaleInputs(inputs[i]);
-			if(i < 2){
-				answers.set(i, 0, 1);
-			}else if(i < 4){
-				answers.set(i, 1, 1);
+			if(isData){
+				inputs[i] = img.getMatrix();
+				scaleInputs(inputs[i]);
+				answers.set(i, character - 'A', 1);
 			}else{
-				answers.set(i, 2, 1);
+				tests[i] = img.getMatrix();
+				scaleInputs(tests[i]);
+				expected.set(i, character - 'A', 1);
 			}
 		}
-		for(int i = 0; i < testSize; i++){
-			ImageBuffer img = new ImageBuffer(projectDir + "/dataset/img" + (dataSize+i) + ".jpeg");
-			img.resize();
-			img.turnBlackAndWhite();
-			img.maximizeContrast();
-			// img.write(HyperParameters.projectDir + "/outputs/imgTest" + (i+1) + ".jpeg");
-			tests[i] = img.getMatrix();
-			scaleInputs(tests[i]);
-			if(i < 1){
-				expected.set(i, 0, 1);
-			}else if(i < 2){
-				expected.set(i, 1, 1);
-			}else{
-				expected.set(i, 2, 1);
-			}
-		}
+		return fileNames.size();
 	}
 	
 	public void scaleInputs(Matrix matrix){

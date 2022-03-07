@@ -67,10 +67,6 @@ public class NetworkTrainer {
 	
 	public void calculateLoss(){
 		for(int j = length - 2; j > 0; j--){
-			// System.out.println("============================");
-			// System.out.println(net.getLayer(j+1).getWeight());
-			// System.out.println(errors[j+1]);
-			// System.out.println("============================");
 			errors[j] = net.getLayer(j+1).getWeight().T().dot(errors[j+1]);
 		}
 	}
