@@ -10,19 +10,29 @@ import javax.imageio.ImageIO;
 
 import algebra.Matrix;
 import algebra.HyperParameters;
+
 /**
 * Image
+* @author Muti Kara
 */
 public class ImageBuffer {
 	BufferedImage image;
 	int width, height;
 	
+	/**
+	* Opens given image file
+	* @param fileName
+	* @throws IOException
+	 */
 	public ImageBuffer(String fileName) throws IOException{
 		image = ImageIO.read(new File(fileName));
 		width = image.getWidth();
 		height = image.getHeight();
 	}
 	
+	/**
+	 * Converts image to black and white.
+	 * */
 	public void turnBlackAndWhite() {
 		for(int w = 0; w < width; w++){
 			for(int h = 0; h < height; h++){
@@ -37,6 +47,9 @@ public class ImageBuffer {
 		}
 	}
 	
+	/**
+	 * Makes picture consist of black and white pixels.
+	 * */
 	public void maximizeContrast(){
 		for(int w = 0; w < width; w++){
 			for(int h = 0; h < height; h++){
@@ -51,6 +64,9 @@ public class ImageBuffer {
 		}
 	}
 	
+	/**
+	 * Resizes image
+	 * */
 	public void resize(){
 		width = HyperParameters.IMAGE_SIZE;
 		height = HyperParameters.IMAGE_SIZE;
@@ -61,6 +77,10 @@ public class ImageBuffer {
 		drawer.dispose();
 	}
 	
+	/**
+	* Converts image to a matrix to use in neural network.
+	* @return output matrix
+	 */
 	public Matrix getMatrix() {
 		Matrix matrix = new Matrix(width, height);
 		for(int w = 0; w < width; w++){
@@ -73,6 +93,11 @@ public class ImageBuffer {
 		return matrix;
 	}
 	
+	/**
+	* Writes image to given file. This stands for debugging purposes.
+	* @param fileName
+	* @throws IOException
+	 */
 	public void write(String fileName) throws IOException {
 		ImageIO.write(image, "png", new File(fileName));
 	}

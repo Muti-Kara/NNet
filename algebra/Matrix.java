@@ -124,6 +124,12 @@ public class Matrix {
 		return C;
 	}
 	
+	/**
+	* Summarizes two matrices element wise.
+	* It happens in place. For convenience it returns this matrix.
+	* @param B
+	* @return this
+	 */
 	public Matrix sum(Matrix B) {
 		if(!(row == B.row && col == B.col)) {
 			System.out.println("Matrix sum error. Size Mismatch.");
@@ -137,6 +143,12 @@ public class Matrix {
 		return this;
 	}
 	
+	/**
+	* Subtracts two matrices element wise.
+	* It happens in place. For convenience it returns this matrix.
+	* @param B
+	* @return this
+	 */
 	public Matrix sub(Matrix B) {
 		if(!(row == B.row && col == B.col)) {
 			System.out.println("Matrix sub error. Size Mismatch.");
@@ -150,6 +162,12 @@ public class Matrix {
 		return this;
 	}
 	
+	/**
+	* Multiplies two matrices element wise.
+	* It happens in place. For convenience it returns this matrix.
+	* @param B
+	* @return this
+	 */
 	public Matrix ewProd(Matrix B) {
 		if(!(row == B.row && col == B.col)) {
 			System.out.println("Matrix exProd error. Size Mismatch.");
@@ -162,6 +180,12 @@ public class Matrix {
 		return this;
 	}
 	
+	/**
+	* Multiplies this matrix with a double b.
+	* It happens in place. For convenience it returns this matrix.
+	* @param B
+	* @return this
+	 */
 	public Matrix sProd(double b) {
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
@@ -171,6 +195,12 @@ public class Matrix {
 		return this;
 	}
 	
+	/**
+	* Summarizes this matrix with a double b.
+	* It happens in place. For convenience it returns this matrix.
+	* @param B
+	* @return this
+	 */
 	public Matrix sSum(double b) {
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
@@ -180,20 +210,10 @@ public class Matrix {
 		return this;
 	}
 	
-	public Matrix ewDiv(Matrix B) {
-		if(!(row == B.row && col == B.col)) {
-			System.out.println("Matrix sum error. Size Mismatch.");
-			return null;
-		}
-		Matrix C = new Matrix(row, col);
-		for(int r = 0; r < row; r++) {
-			for(int c = 0; c < col; c++) {
-				C.matrix[r][c] = matrix[r][c] / B.matrix[r][c];
-			}
-		}
-		return C;
-	}
-	
+	/**
+	* 
+	* @return transpose of this matrix.
+	 */
 	public Matrix T() {
 		Matrix C = new Matrix(col, row);
 		for(int r = 0; r < row; r++) {
@@ -204,6 +224,7 @@ public class Matrix {
 		return C;
 	}
 	
+	@Override
 	public String toString() {
 		String str = "";
 		for(int r = 0; r < row; r++) {

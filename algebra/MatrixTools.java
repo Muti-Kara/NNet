@@ -1,5 +1,7 @@
 package algebra;
 
+import java.util.Random;
+
 /**
 * MatrixTools
 * @author Muti Kara
@@ -14,7 +16,7 @@ public class MatrixTools {
 	public static Matrix func(Matrix matrix){
 		for(int r = 0; r < matrix.getRow(); r++) {
 			for(int c = 0; c < matrix.getCol(); c++) {
-				matrix.set(r, c, Math.max(0.5*(Math.exp(matrix.get(r, c)) - 1), matrix.get(r, c))); 
+				matrix.set(r, c, Math.max(0, matrix.get(r, c))); 
 			}
 		}
 		return matrix;
@@ -28,7 +30,7 @@ public class MatrixTools {
 	public static Matrix d_func(Matrix matrix) {
 		for(int r = 0; r < matrix.getRow(); r++) {
 			for(int c = 0; c < matrix.getCol(); c++) {
-				matrix.set(r, c, (matrix.get(r, c) <= 0)? matrix.get(r, c) + 0.5 : 1);
+				matrix.set(r, c, (matrix.get(r, c) <= 0)? 0 : 1);
 			}
 		}
 		return matrix;
@@ -52,20 +54,10 @@ public class MatrixTools {
 	}
 	
 	/**
-	* Used for calculating regularization.
-	* @param matrix
-	* @return half of sum of squares of every parameters.
+	* Converts the matrix array to a vector.
+	* @param matArray
+	* @return flattened matrix array
 	 */
-	public static double regularization(Matrix matrix) {
-		double sum = 0;
-		for(int j = 0; j < matrix.getRow(); j++){
-			for(int i = 0; i < matrix.getCol(); i++){
-				sum += matrix.get(j, i) * matrix.get(j, i);
-			}
-		}
-		return sum / 2;
-	}
-	
 	public static Matrix flatten(Matrix[] matArray){
 		Matrix vector = new Matrix(matArray.length * matArray[0].getRow() * matArray[0].getCol(), 1);
 		int k = 0;
@@ -79,6 +71,11 @@ public class MatrixTools {
 		return vector;
 	}
 	
+	/**
+	* 
+	* @param matrix
+	* @return scales a vector.
+	 */
 	public static Matrix scale(Matrix matrix){
 		double min = 1e4;
 		for(int j = 0; j < matrix.getRow(); j++){
@@ -88,6 +85,19 @@ public class MatrixTools {
 			matrix.set(j, 0, (matrix.get(j, 0) - min));
 		}
 		return matrix;
+	}
+	
+	public static Matrix generate(Matrix parent) {
+		Matrix child = new Matrix(parent.getRow(), parent.getCol());
+		Random rand = new Random();
+		
+		for(int r = 0; r < child.getRow(); r++){
+			for(int c = 0; c < child.getCol(); c++){
+				child.set(r, c, parent.get(r, c) + rand.nextGaussian() * HyperParameters.CNN_LEARNING_RATE);
+			}
+		}
+		
+		return child;
 	}
 }
 

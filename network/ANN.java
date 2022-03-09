@@ -7,11 +7,14 @@ import algebra.*;
  * A FC network
  * @author Muti Kara
  * */
-public class NeuralNet {
+public class ANN {
 	int[] structure;
 	FullyConnected[] layers;
 	
-	public NeuralNet() {
+	/**
+	 * Creates an artificial neural network
+	 * */
+	public ANN() {
 		this.structure = HyperParameters.structure;
 		layers = new FullyConnected[structure.length];
 		for(int i = 1; i < structure.length; i++){
@@ -19,20 +22,26 @@ public class NeuralNet {
 		}
 	}
 	
+	/**
+	* 
+	* @param input
+	* @return output probabilities for categories
+	 */
 	public Matrix forwardPropagation(Matrix input) {
 		Matrix output = input.createClone();
 		for(int layer = 1; layer < structure.length; layer++) {
 			output = layers[layer].goForward(output, layer == structure.length - 1);
 		}
-		return MatrixTools.softmax(output);
+		return output;
 	}
 	
+	/**
+	* 
+	* @param index
+	* @return index th layer of network
+	 */
 	public FullyConnected getLayer(int index){
 		return layers[index];
-	}
-	
-	public int getSize(){
-		return structure.length;
 	}
 	
 	@Override

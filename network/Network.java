@@ -8,15 +8,15 @@ import algebra.MatrixTools;
 * @author Muti Kara
 */
 public class Network {
-	ConvolutionalNet cnn;
-	NeuralNet ann;
+	CNN cnn;
+	ANN ann;
 	
 	/**
-	* Takes two arguments: 1 ConvolutionalNet and 1 NeuralNet
+	* Takes two arguments: 1 CNN and 1 ANN
 	* @param cnn
 	* @param ann
 	 */
-	public Network(ConvolutionalNet cnn, NeuralNet ann){
+	public Network(CNN cnn, ANN ann){
 		this.cnn = cnn;
 		this.ann = ann;
 	}
@@ -44,13 +44,13 @@ public class Network {
 	* @param input
 	* @return class of input
 	 */
-	public int classify(Matrix input){
+	public String classify(Matrix input){
 		Matrix ans = forwardPropagation(input);
 		int max = 0;
 		for(int r = 0; r < ans.getRow(); r++)
 			if(ans.get(r, 0) > ans.get(max, 0))
 				max = r;
-		return max;
+		return (char) (max + 'A') + " " + ans.get(max, 0);
 	}
 	
 	@Override

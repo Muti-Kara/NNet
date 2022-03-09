@@ -9,10 +9,19 @@ import algebra.Matrix;
 public class Pooling {
 	int size;
 	
+	/**
+	* Constructor takes only one parameter. 
+	* @param size
+	 */
 	public Pooling(int size){
 		this.size = size;
 	}
 	
+	/**
+	* Applies max pooling with one padding.
+	* @param input
+	* @return pooled output for next layer
+	 */
 	public Matrix[] goForward(Matrix[] input) {
 		Matrix[] ans = new Matrix[input.length];
 		for(int i = 0; i < input.length; i++){

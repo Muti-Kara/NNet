@@ -1,10 +1,8 @@
 package layer;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
 import algebra.HyperParameters;
 import algebra.Matrix;
+import algebra.MatrixTools;
 
 /**
 * Convolutional Layer
@@ -14,16 +12,37 @@ public class Convolutional {
 	Matrix[] kernels;
 	int kernelSize;
 	
-	
+	/**
+	* Constructor takes two parameters:
+	* @param number of kernels
+	* @param kernels size
+	 */
 	public Convolutional(int numOfKernels, int kernelSize) {
 		kernels = new Matrix[numOfKernels];
 		this.kernelSize = kernelSize;
-		for(int i = 0; i < numOfKernels; i++){
+		for(int i = 0; i < kernels.length; i++){
 			kernels[i] = new Matrix(kernelSize, kernelSize);
 			kernels[i].randomize(HyperParameters.KERNEL_RANDOMIZATION);
 		}
 	}
 	
+	/**
+	* Creates new convolutional layer from parent.
+	* @param conv
+	 */
+	public Convolutional(Convolutional conv) {
+		kernels = new Matrix[conv.kernels.length];
+		this.kernelSize = conv.kernelSize;
+		for(int i = 0; i < kernels.length; i++){
+			kernels[i] = MatrixTools.generate(conv.getKernel(i));
+		}
+	}
+	
+	/**
+	* Takes a matrix array as input. Applies its kernel with step size 1.
+	* @param input
+	* @return output for next layers
+	 */
 	public Matrix[] goForward(Matrix[] input) {
 		Matrix[] ans = new Matrix[kernels.length * input.length];
 		for(int i = 0; i < input.length; i++){
@@ -46,8 +65,13 @@ public class Convolutional {
 		return ans;
 	}
 	
-	public void setKernel(int index, Matrix matrix) {
-		kernels[index] = matrix;
+	/**
+	 * 
+	 * @param index
+	 * @return index th kernel
+	 */
+	public Matrix getKernel(int index) {
+		return kernels[index];
 	}
 	
 	@Override

@@ -9,6 +9,8 @@ import algebra.Matrix;
 
 /**
 * InputImage
+* This class reads dataset folder and gets the training and test data.
+* @author Muti Kara
 */
 public class InputImage {
 	int dataSize;
@@ -20,6 +22,11 @@ public class InputImage {
 	Matrix answers;
 	Matrix expected;
 	
+	/**
+	* Scans projectDir/dataset and projectDir/tests folders.
+	* These folders consists of 26 sub folders each named with an upper case english letter.
+	* @throws IOException
+	 */
 	public InputImage() throws IOException{
 		HyperParameters.DATA_SIZE = readFolder("dataset", true);
 		HyperParameters.TEST_SIZE = readFolder("tests", false);
@@ -27,7 +34,7 @@ public class InputImage {
 	
 	public int readFolder(String folderName, boolean isData) throws IOException{
 		ArrayList<String> fileNames = new ArrayList<>();
-		for(char character = 'A'; character != 'F'; character++){
+		for(char character = 'A'; character <= 'Z'; character++){
 			File[] files = new File(projectDir + "/" + folderName + "/" + character).listFiles();
 			for(File file : files){
 				if(file.isFile())
@@ -61,6 +68,10 @@ public class InputImage {
 		return fileNames.size();
 	}
 	
+	/**
+	* Scales input in a binary way.
+	* @param matrix
+	 */
 	public void scaleInputs(Matrix matrix){
 		for(int r = 0; r < matrix.getRow(); r++)
 			for(int c = 0; c < matrix.getCol(); c++)
