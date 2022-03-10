@@ -1,6 +1,6 @@
-package layer;
+package network.ann.layer;
 
-import algebra.*;
+import algebra.matrix.*;
 
 /**
 * Fully Connected Layer
@@ -86,7 +86,8 @@ public class FullyConnected {
 
 	@Override
 	public String toString() {
-		return "\n" + weight + "\n" + bias;
+		return "\n" + weight.getCol() + " " + weight.getRow() + 
+			"\n" + weight + "\n" + bias;
 	}
 
 }

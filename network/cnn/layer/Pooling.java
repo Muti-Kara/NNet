@@ -1,6 +1,6 @@
-package layer;
+package network.cnn.layer;
 
-import algebra.Matrix;
+import algebra.matrix.Matrix;
 
 /**
 * Pooling Layer
@@ -18,7 +18,7 @@ public class Pooling {
 	}
 	
 	/**
-	* Applies max pooling with one padding.
+	* Applies max pooling.
 	* @param input
 	* @return pooled output for next layer
 	 */

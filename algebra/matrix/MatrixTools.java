@@ -1,6 +1,7 @@
-package algebra;
+package algebra.matrix;
 
 import java.util.Random;
+import algebra.*;
 
 /**
 * MatrixTools
@@ -93,7 +94,7 @@ public class MatrixTools {
 		
 		for(int r = 0; r < child.getRow(); r++){
 			for(int c = 0; c < child.getCol(); c++){
-				child.set(r, c, parent.get(r, c) + rand.nextGaussian() * HyperParameters.CNN_LEARNING_RATE);
+				child.set(r, c, parent.get(r, c) + rand.nextGaussian() * NetworkParameters.cnnLearningRate);
 			}
 		}
 		

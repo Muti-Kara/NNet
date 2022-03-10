@@ -1,11 +1,11 @@
-package preproccess;
+package preproccess.images;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import algebra.HyperParameters;
-import algebra.Matrix;
+import algebra.NetworkParameters;
+import algebra.matrix.Matrix;
 
 /**
 * InputImage
@@ -15,7 +15,7 @@ import algebra.Matrix;
 public class InputImage {
 	int dataSize;
 	int testSize;
-	String projectDir = HyperParameters.projectDir;
+	String readDir = NetworkParameters.readDir + "/images";
 	
 	Matrix[] inputs;
 	Matrix[] tests;
@@ -28,14 +28,14 @@ public class InputImage {
 	* @throws IOException
 	 */
 	public InputImage() throws IOException{
-		HyperParameters.DATA_SIZE = readFolder("dataset", true);
-		HyperParameters.TEST_SIZE = readFolder("tests", false);
+		NetworkParameters.dataSize = readFolder("dataset", true);
+		NetworkParameters.testSize = readFolder("tests", false);
 	}
 	
 	public int readFolder(String folderName, boolean isData) throws IOException{
 		ArrayList<String> fileNames = new ArrayList<>();
 		for(char character = 'A'; character <= 'Z'; character++){
-			File[] files = new File(projectDir + "/" + folderName + "/" + character).listFiles();
+			File[] files = new File(readDir + "/" + folderName + "/" + character).listFiles();
 			for(File file : files){
 				if(file.isFile())
 					fileNames.add(file.getName() + " " + character);
@@ -43,15 +43,15 @@ public class InputImage {
 		}
 		if(isData){
 			inputs = new Matrix[fileNames.size()];
-			answers = new Matrix(fileNames.size(), HyperParameters.structure[HyperParameters.structure.length - 1]);
+			answers = new Matrix(fileNames.size(), NetworkParameters.structure[NetworkParameters.structure.length - 1]);
 		}else{
 			tests = new Matrix[fileNames.size()];
-			expected = new Matrix(fileNames.size(), HyperParameters.structure[HyperParameters.structure.length - 1]);
+			expected = new Matrix(fileNames.size(), NetworkParameters.structure[NetworkParameters.structure.length - 1]);
 		}
 		for(int i = 0; i < fileNames.size(); i++){
 			String file = fileNames.get(i).substring(0, fileNames.get(i).length() - 2);
 			char character = fileNames.get(i).charAt(fileNames.get(i).length() - 1);
-			ImageBuffer img = new ImageBuffer(projectDir + "/" + folderName + "/" + character + "/" + file);
+			ImageBuffer img = new ImageBuffer(readDir + "/" + folderName + "/" + character + "/" + file);
 			img.resize();
 			img.turnBlackAndWhite();
 			img.maximizeContrast();
@@ -86,8 +86,22 @@ public class InputImage {
 		return tests[index];
 	}
 	
+	public char getAnswer(int index) {
+		for(char i = 'A'; i <= 'Z'; i++)
+			if(answers.get(index, i - 'A') == 1)
+				return i;
+		return '!';
+	}
+	
 	public Matrix getAnswers() {
 		return answers;
+	}
+	
+	public char getExpected(int index) {
+		for(char i = 'A'; i <= 'Z'; i++)
+			if(expected.get(index, i - 'A') == 1)
+				return i;
+		return '!';
 	}
 	
 	public Matrix getExpected() {

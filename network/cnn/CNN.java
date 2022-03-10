@@ -1,19 +1,17 @@
-package network;
+package network.cnn;
 
-import algebra.HyperParameters;
-import algebra.Matrix;
-import algebra.MatrixTools;
-import layer.Convolutional;
-import layer.Pooling;
+import network.cnn.layer.*;
+import algebra.NetworkParameters;
+import algebra.matrix.*;
 
 /**
 * A simple convolutional network
 * @author Muti Kara
 */
 public class CNN {
-	int[] convolutional = HyperParameters.convolutional;
-	int[] kernel = HyperParameters.kernel;
-	int[] pool = HyperParameters.pool;
+	int[] convolutional = NetworkParameters.convolutional;
+	int[] kernel = NetworkParameters.kernel;
+	int[] pool = NetworkParameters.pool;
 	Convolutional[] convLayers = new Convolutional[convolutional.length];
 	Pooling[] poolLayers = new Pooling[pool.length];
 	
@@ -52,6 +50,14 @@ public class CNN {
 		}
 		
 		return MatrixTools.flatten(preOutput);
+	}
+	
+	public void setConvLayers(int index, Convolutional layer) {
+		convLayers[index] = layer;
+	}
+	
+	public void setPoolLayers(int index, Pooling layer) {
+		poolLayers[index] = layer;
 	}
 	
 	@Override

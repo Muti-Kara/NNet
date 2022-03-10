@@ -1,17 +1,18 @@
 package training;
 
-import layer.FullyConnected;
 import preproccess.InputData;
 import algebra.*;
-import network.ANN;
+import algebra.matrix.*;
+import network.ann.*;
+import network.ann.layer.*;
 
 /**
 * NetworkTrainer
 * @author Muti Kara
 */
 public class ANNTrainer {
-	int[] structure = HyperParameters.structure;
-	int dataSize = HyperParameters.DATA_SIZE;
+	int[] structure = NetworkParameters.structure;
+	int dataSize = NetworkParameters.dataSize;
 	int length = structure.length;
 	
 	Matrix[] activation = new Matrix[structure.length];
@@ -23,6 +24,7 @@ public class ANNTrainer {
 	Matrix input;
 	Matrix answer;
 	InputData data;
+	boolean flag50 = true, flag20 = true, flag7 = true;
 	
 	/**
 	* Constructor takes a neural net input.
@@ -42,7 +44,7 @@ public class ANNTrainer {
 	 */
 	public void train(InputData data){
 		this.data = data;
-		int epoch = HyperParameters.EPOCH;
+		int epoch = NetworkParameters.epoch;
 		while(epoch-->0){
 			double crossEntropy = 0;
 			for(int i = 0; i < dataSize; i++){
@@ -51,7 +53,19 @@ public class ANNTrainer {
 				calculateLoss();
 				calculateChanges();
 			}
-			// System.out.printf("Epoch %d:\t%.8f\n", epoch, crossEntropy);
+			System.out.printf("Epoch %d:\t%.8f\n", epoch, crossEntropy);
+			if(flag50 && crossEntropy < 50){
+				NetworkParameters.learningRate *= 1.25;
+				flag50 = false;
+			}
+			if(flag20 && crossEntropy < 20){
+				NetworkParameters.learningRate *= 1.25;
+				flag20 = false;
+			}
+			if(flag7 && crossEntropy < 7){
+				NetworkParameters.learningRate *= 1.25;
+				flag7 = false;
+			}
 			if(Double.isNaN(crossEntropy))
 				return;
 			applyChanges();
@@ -78,7 +92,7 @@ public class ANNTrainer {
 		Matrix ithAnswer = data.getAnswers().getVector(datum);
 		double crossEntropy = 0;
 		for(int i = 0; i < ithAnswer.getRow(); i++){
-			crossEntropy -= ithAnswer.get(i, 0) * Math.log(activation[length - 1].get(i, 0)) + (1 - ithAnswer.get(i, 0)) * Math.log(1 - activation[length - 1].get(i, 0));
+			crossEntropy -= ithAnswer.get(i, 0) * Math.log(activation[length - 1].get(i, 0));// + (1 - ithAnswer.get(i, 0)) * Math.log(1 - activation[length - 1].get(i, 0));
 		}
 		errors[length - 1] = activation[length - 1].sub(ithAnswer);
 		return crossEntropy;
@@ -113,8 +127,8 @@ public class ANNTrainer {
 	 * */
 	public void applyChanges() {
 		for(int i = 1; i < length; i++){
-			net.getLayer(i).sub(changes[i], HyperParameters.LEARNING_RATE);
-			net.getLayer(i).sub(previousChanges[i], HyperParameters.MOMENTUM_FACTOR);
+			net.getLayer(i).sub(changes[i], NetworkParameters.learningRate);
+			net.getLayer(i).sub(previousChanges[i], NetworkParameters.momentumFactor);
 		}
 	}
 }

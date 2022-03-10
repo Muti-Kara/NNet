@@ -1,13 +1,14 @@
 package network;
 
-import algebra.Matrix;
-import algebra.MatrixTools;
+import algebra.matrix.*;
+import network.ann.*;
+import network.cnn.*;
 
 /**
 * A feed forward network.
 * @author Muti Kara
 */
-public class Network {
+public class NeuralNetwork {
 	CNN cnn;
 	ANN ann;
 	
@@ -16,16 +17,9 @@ public class Network {
 	* @param cnn
 	* @param ann
 	 */
-	public Network(CNN cnn, ANN ann){
+	public NeuralNetwork(CNN cnn, ANN ann){
 		this.cnn = cnn;
 		this.ann = ann;
-	}
-	
-	/**
-	 * Loads pretrained values for cnn and ann
-	 * */
-	public void getPreTrained(){
-		// TODO: read from trained file
 	}
 	
 	/**

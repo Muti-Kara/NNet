@@ -1,6 +1,7 @@
-package algebra;
+package algebra.matrix;
 
 import java.util.Random;
+import algebra.*;
 
 /**
  * Matrix class for neural network
@@ -65,7 +66,7 @@ public class Matrix {
 	public Matrix randomize() {
 		for(int r = 0; r < row; r++)
 			for(int c = 0; c < col; c++)
-				matrix[r][c] = Math.abs(rand.nextGaussian() * HyperParameters.RANDOMIZATION);
+				matrix[r][c] = Math.abs(rand.nextGaussian() * NetworkParameters.randomization);
 		return this;
 	}
 	

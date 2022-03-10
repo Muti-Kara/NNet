@@ -1,7 +1,6 @@
 package preproccess;
 
-import algebra.Matrix;
-import algebra.MatrixTools;
+import algebra.matrix.*;
 
 /**
 * InputData

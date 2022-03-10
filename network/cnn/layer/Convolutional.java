@@ -1,8 +1,7 @@
-package layer;
+package network.cnn.layer;
 
-import algebra.HyperParameters;
-import algebra.Matrix;
-import algebra.MatrixTools;
+import algebra.NetworkParameters;
+import algebra.matrix.*;
 
 /**
 * Convolutional Layer
@@ -22,7 +21,7 @@ public class Convolutional {
 		this.kernelSize = kernelSize;
 		for(int i = 0; i < kernels.length; i++){
 			kernels[i] = new Matrix(kernelSize, kernelSize);
-			kernels[i].randomize(HyperParameters.KERNEL_RANDOMIZATION);
+			kernels[i].randomize(NetworkParameters.kernelRandomization);
 		}
 	}
 	
@@ -74,11 +73,15 @@ public class Convolutional {
 		return kernels[index];
 	}
 	
+	public void setKernel(int index, Matrix kernel) {
+		kernels[index] = kernel;
+	}
+	
 	@Override
 	public String toString() {
 		String str = kernelSize + " " + kernels.length + "\n";
 		for(int i = 0; i < kernels.length; i++){
-			str += kernels[i].toString();
+			str += kernels[i].toString() + "\n";
 		}
 		return str;
 	}

@@ -1,29 +1,36 @@
 package training;
 
+import network.cnn.*;
+import network.ann.*;
 import network.*;
+import preproccess.images.*;
 import preproccess.*;
+
 import algebra.*;
+import algebra.matrix.*;
 
 /**
 * CNNTrainer
 * @author Muti Kara
 */
 public class CNNTrainer {
-	Matrix[] input = new Matrix[HyperParameters.DATA_SIZE];
+	Matrix[] input = new Matrix[NetworkParameters.dataSize];
 	InputImage dataImg;
 	CNN convNet = new CNN();
 	ANN ann = new ANN();
 	double best = 1e5;
+	double penalty = 1e4;
 	
 	public CNNTrainer(InputImage img) {
 		dataImg = img;
 	}
 	
 	public void train() {
-		for(int j = 0; j < HyperParameters.CNN_EPOCH; j++){
-			for(int i = 0; i < HyperParameters.CNN_GENERATION; i++){
+		for(int j = 0; j < NetworkParameters.cnnEpoch; j++){
+			for(int i = 0; i < NetworkParameters.cnnGeneration; i++){
+				System.out.println("Epoch: " + j + "\tTry: " + i + "\t\tBest: " + best);
 				CNN candidate;
-				if(i*j < 5)
+				if(i*j < 20)
 					candidate = new CNN();
 				else
 					candidate = new CNN(convNet);
@@ -36,22 +43,11 @@ public class CNNTrainer {
 					best = candidateError;
 				}
 			}
-			Network network = new Network(convNet, ann);
-			double kernelFailures = HyperParameters.TEST_SIZE;
-			for(int i = 0; i < HyperParameters.TEST_SIZE; i++){
-				String str = network.classify( dataImg.getTests(i) );
-				System.out.println((char) ('A' + i) + str);
-				if('A' + i == str.charAt(0))
-					kernelFailures -= Double.parseDouble(str.substring(str.indexOf(' ')));
-				else
-					kernelFailures += 3;
-			}
-			System.out.println(kernelFailures);
 		}
 	}
 	
 	public void forwardPropagateCNN(CNN candidate) {
-		for(int i = 0; i < HyperParameters.DATA_SIZE; i++){
+		for(int i = 0; i < NetworkParameters.dataSize; i++){
 			input[i] = MatrixTools.scale(candidate.forwardPropagation(dataImg.getInputs(i)));
 		}
 	}
@@ -65,16 +61,22 @@ public class CNNTrainer {
 	}
 	
 	public double calculateKernelErrors(CNN convNet, ANN neuralNet) {
-		Network network = new Network(convNet, neuralNet);
-		double kernelFailures = HyperParameters.TEST_SIZE;
-		for(int i = 0; i < HyperParameters.TEST_SIZE; i++){
-			String str = network.classify( dataImg.getInputs(9*i) );
-			if('A' + i == str.charAt(0))
+		NeuralNetwork network = new NeuralNetwork(convNet, neuralNet);
+		double kernelFailures = 0;
+		for(int i = 0; i < NetworkParameters.dataSize; i++){
+			String str = network.classify( dataImg.getInputs(i) );
+			char character = dataImg.getAnswer(i);
+			System.out.println(character + str);
+			if(character == str.charAt(0))
 				kernelFailures -= Double.parseDouble(str.substring(str.indexOf(' ')));
 			else
-				kernelFailures += 3;
+				kernelFailures += penalty;
 		}
 		return kernelFailures;
+	}
+	
+	public CNN getBest() {
+		return convNet;
 	}
 	
 }

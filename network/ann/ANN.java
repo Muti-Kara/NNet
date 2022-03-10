@@ -1,22 +1,21 @@
-package network;
+package network.ann;
 
-import layer.FullyConnected;
-import algebra.*;
+import network.ann.layer.*;
+import algebra.NetworkParameters;
+import algebra.matrix.*;
 
 /**
  * A FC network
  * @author Muti Kara
  * */
 public class ANN {
-	int[] structure;
-	FullyConnected[] layers;
+	int[] structure = NetworkParameters.structure;
+	FullyConnected[] layers = new FullyConnected[structure.length];
 	
 	/**
 	 * Creates an artificial neural network
 	 * */
 	public ANN() {
-		this.structure = HyperParameters.structure;
-		layers = new FullyConnected[structure.length];
 		for(int i = 1; i < structure.length; i++){
 			layers[i] = new FullyConnected(structure[i-1], structure[i]);
 		}
@@ -44,12 +43,17 @@ public class ANN {
 		return layers[index];
 	}
 	
+	/**
+	* Sets index th layer with given FC layer
+	* @param index
+	 */
+	public void setLayer(int index, FullyConnected layer){
+		layers[index] = layer;
+	}
+	
 	@Override
 	public String toString() {
-		String str = "" + structure.length + "\n";
-		for(int i = 0; i < structure.length; i++){
-			str += structure[i] + " ";
-		}
+		String str = "";
 		for(int i = 1; i < layers.length; i++){
 			str += "\n" + layers[i].toString();
 		}

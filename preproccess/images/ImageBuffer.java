@@ -1,4 +1,4 @@
-package preproccess;
+package preproccess.images;
 
 import java.awt.image.BufferedImage;
 import java.awt.Image;
@@ -8,8 +8,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import algebra.Matrix;
-import algebra.HyperParameters;
+import algebra.matrix.Matrix;
+import algebra.NetworkParameters;
 
 /**
 * Image
@@ -68,8 +68,8 @@ public class ImageBuffer {
 	 * Resizes image
 	 * */
 	public void resize(){
-		width = HyperParameters.IMAGE_SIZE;
-		height = HyperParameters.IMAGE_SIZE;
+		width = NetworkParameters.imageSize;
+		height = NetworkParameters.imageSize;
 		Image resizedImg = image.getScaledInstance(width, height, Image.SCALE_DEFAULT);
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D drawer = image.createGraphics();
