@@ -28,9 +28,7 @@ public class NeuralNetwork {
 	* @return Resulting matrix after forward propagating cnn and ann
 	 */
 	public Matrix forwardPropagation(Matrix input){
-		Matrix cnnOutputs = cnn.forwardPropagation(input);
-		MatrixTools.scale(cnnOutputs);
-		return ann.forwardPropagation(cnnOutputs);
+		return ann.forwardPropagation( cnn.forwardPropagation(input) );
 	}
 	
 	/**

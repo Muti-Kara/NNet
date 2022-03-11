@@ -43,6 +43,7 @@ public class Reader {
 		int numOfKernels = cnnIn.nextInt();
 		Convolutional conv = new Convolutional(numOfKernels, kernelSize);
 		
+		conv.setKernelBiases( readMatrix(numOfKernels, 1, cnnIn) );
 		for(int i = 0; i < numOfKernels; i++){
 			conv.setKernel(i, readMatrix(kernelSize, kernelSize, cnnIn));
 		}

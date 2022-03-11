@@ -9,6 +9,7 @@ import algebra.matrix.*;
 */
 public class Convolutional {
 	Matrix[] kernels;
+	Matrix kernelBiases;
 	int kernelSize;
 	
 	/**
@@ -18,11 +19,13 @@ public class Convolutional {
 	 */
 	public Convolutional(int numOfKernels, int kernelSize) {
 		kernels = new Matrix[numOfKernels];
+		kernelBiases = new Matrix(kernels.length, 1);
 		this.kernelSize = kernelSize;
 		for(int i = 0; i < kernels.length; i++){
 			kernels[i] = new Matrix(kernelSize, kernelSize);
 			kernels[i].randomize(NetworkParameters.kernelRandomization);
 		}
+		kernelBiases.randomize();
 	}
 	
 	/**
@@ -31,6 +34,7 @@ public class Convolutional {
 	 */
 	public Convolutional(Convolutional conv) {
 		kernels = new Matrix[conv.kernels.length];
+		kernelBiases = MatrixTools.generate(conv.getKernelBiases());
 		this.kernelSize = conv.kernelSize;
 		for(int i = 0; i < kernels.length; i++){
 			kernels[i] = MatrixTools.generate(conv.getKernel(i));
@@ -56,9 +60,10 @@ public class Convolutional {
 								result += input[i].get(r + rk, c + ck) * kernels[j].get(rk, ck);
 							}
 						}
-						ans[index].set(r, c, result);
+						ans[index].set(r, c, result + kernelBiases.get(j, 0));
 					}
 				}
+				MatrixTools.func(ans[index]);
 			}
 		}
 		return ans;
@@ -77,9 +82,18 @@ public class Convolutional {
 		kernels[index] = kernel;
 	}
 	
+	public Matrix getKernelBiases() {
+		return kernelBiases;
+	}
+	
+	public void setKernelBiases(Matrix kernelBiases) {
+		this.kernelBiases = kernelBiases;
+	}
+	
 	@Override
 	public String toString() {
 		String str = kernelSize + " " + kernels.length + "\n";
+		str += kernelBiases + "\n";
 		for(int i = 0; i < kernels.length; i++){
 			str += kernels[i].toString() + "\n";
 		}

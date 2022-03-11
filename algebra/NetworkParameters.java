@@ -55,8 +55,8 @@ public class NetworkParameters {
 	/**
 	 * Number of epochs to train network.
 	 * */
-	public static int epoch = 300;
-	public static int stochastic = 200;
+	public static int epoch;
+	public static int stochastic;
 	
 	public static void setEpoch(int epoch) {
 		NetworkParameters.epoch = epoch;
@@ -66,8 +66,8 @@ public class NetworkParameters {
 		NetworkParameters.stochastic = stochastic;
 	}
 	
-	public static int cnnEpoch = 5;
-	public static int cnnGeneration = 40;
+	public static int cnnEpoch;
+	public static int cnnGeneration;
 	
 	public static void setCnnEpoch(int cnnEpoch) {
 		NetworkParameters.cnnEpoch = cnnEpoch;
@@ -80,7 +80,7 @@ public class NetworkParameters {
 	/**
 	 * Image size before putting into network.
 	 * */
-	public static int imageSize = 33;
+	public static int imageSize;
 	
 	public static void setImageSize(int imageSize) {
 		NetworkParameters.imageSize = imageSize;
@@ -90,9 +90,9 @@ public class NetworkParameters {
 	 * Learning rate and momentum factor of artificial neural network
 	 * Learning rate of CNN
 	 * */
-	public static double learningRate = 0.03;
-	public static double cnnLearningRate = 0.05;
-	public static double momentumFactor = 0.01;
+	public static double learningRate;
+	public static double cnnLearningRate;
+	public static double momentumFactor;
 	
 	public static void setLearningRate(double learningRate) {
 		NetworkParameters.learningRate = learningRate;
@@ -109,8 +109,8 @@ public class NetworkParameters {
 	/**
 	 * Random values for initialiation of ANN and CNN.
 	 * */
-	public static double randomization = 0.001;
-	public static double kernelRandomization = 0.1;
+	public static double randomization;
+	public static double kernelRandomization;
 	
 	public static void setRandomization(double randomization) {
 		NetworkParameters.randomization = randomization;

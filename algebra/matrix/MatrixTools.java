@@ -72,22 +72,6 @@ public class MatrixTools {
 		return vector;
 	}
 	
-	/**
-	* 
-	* @param matrix
-	* @return scales a vector.
-	 */
-	public static Matrix scale(Matrix matrix){
-		double min = 1e4;
-		for(int j = 0; j < matrix.getRow(); j++){
-			min = Math.min(min, matrix.get(j, 0));
-		}
-		for(int j = 0; j < matrix.getRow(); j++){
-			matrix.set(j, 0, (matrix.get(j, 0) - min));
-		}
-		return matrix;
-	}
-	
 	public static Matrix generate(Matrix parent) {
 		Matrix child = new Matrix(parent.getRow(), parent.getCol());
 		Random rand = new Random();
