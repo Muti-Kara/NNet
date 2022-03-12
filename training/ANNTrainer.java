@@ -38,19 +38,20 @@ public class ANNTrainer {
 	* Trains network with this data.
 	* @param data
 	 */
-	public void train(DataOrganizer organizer){
+	public void train(DataOrganizer organizer, boolean shuffle){
 		this.organizer = organizer;
 		int epoch = NetworkParameters.epoch;
 		while(epoch-->0){
 			double crossEntropy = 0;
-			organizer.shuffle();
+			if(shuffle)	organizer.shuffle();
 			for(int i = 0; i < NetworkParameters.stochastic; i++){
 				forwardPropagate(i);
 				crossEntropy += calculateError(i);
 				calculateLoss();
 				calculateChanges();
 			}
-			// System.out.printf("Epoch %d:\t%.8f\n", epoch, crossEntropy);
+			if(epoch % 20 == 0)
+				System.out.printf("Epoch %d:\t%.8f\n", epoch, crossEntropy);
 			if(Double.isNaN(crossEntropy))
 				return;
 			applyChanges();
@@ -117,6 +118,3 @@ public class ANNTrainer {
 		}
 	}
 }
-
-
-

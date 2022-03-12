@@ -9,7 +9,7 @@ import algebra.matrix.Matrix;
 
 /**
 * InputImage
-* This class reads dataset folder and gets the training and test data.
+* This class reads a folder and gets the input and answer.
 * @author Muti Kara
 */
 public class InputImage {
@@ -51,10 +51,20 @@ public class InputImage {
 		return fileNames.size();
 	}
 	
-	public Matrix getInputs(int index) {
+	/**
+	* 
+	* @param index
+	* @return index th input
+	 */
+	public Matrix getInput(int index) {
 		return inputs[index];
 	}
 	
+	/**
+	* 
+	* @param index
+	* @return index th answer
+	 */
 	public char getAnswer(int index) {
 		for(char i = 'A'; i <= 'Z'; i++)
 			if(answers.get(index, i - 'A') == 1)
@@ -62,6 +72,18 @@ public class InputImage {
 		return '!';
 	}
 	
+	/**
+	* 
+	* @return all inputs
+	 */
+	public Matrix[] getInputs() {
+		return inputs;
+	}
+	
+	/**
+	* 
+	* @return all answers
+	 */
 	public Matrix getAnswers() {
 		return answers;
 	}

@@ -26,16 +26,6 @@ public class CNN {
 	}
 	
 	/**
-	* Creates a convolutional network.
-	 */
-	public CNN(CNN parent) {
-		for(int i = 0; i < convLayers.length; i++){
-			convLayers[i] = new Convolutional(parent.convLayers[i]);
-			poolLayers[i] = new Pooling(pool[i]);
-		}
-	}
-	
-	/**
 	* takes image as matrix input and returns a vector for ann.
 	* @param input
 	* @return vector for ann
@@ -52,11 +42,19 @@ public class CNN {
 		return MatrixTools.flatten(preOutput);
 	}
 	
-	public void setConvLayers(int index, Convolutional layer) {
+	public Convolutional getConvLayer(int index) {
+		return convLayers[index];
+	}
+	
+	public Pooling getPoolLayer(int index) {
+		return poolLayers[index];
+	}
+	
+	public void setConvLayer(int index, Convolutional layer) {
 		convLayers[index] = layer;
 	}
 	
-	public void setPoolLayers(int index, Pooling layer) {
+	public void setPoolLayer(int index, Pooling layer) {
 		poolLayers[index] = layer;
 	}
 	

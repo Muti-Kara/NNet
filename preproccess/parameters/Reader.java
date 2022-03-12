@@ -31,8 +31,8 @@ public class Reader {
 		int length = cnnIn.nextInt();
 		
 		for(int i = 0; i < length; i++){
-			cnn.setConvLayers(i, readConvLayer());
-			cnn.setPoolLayers(i, new Pooling(cnnIn.nextInt()));
+			cnn.setConvLayer(i, readConvLayer());
+			cnn.setPoolLayer(i, new Pooling(cnnIn.nextInt()));
 		}
 		
 		return cnn;

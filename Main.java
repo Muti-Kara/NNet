@@ -16,20 +16,20 @@ public class Main {
 		
 		NetworkParameters.addConvolutionalLayer(2, 5, 2);
 		NetworkParameters.addConvolutionalLayer(2, 3, 2);
-		NetworkParameters.addFullyConnectedLayer(256);
+		NetworkParameters.addFullyConnectedLayer(100);
 		NetworkParameters.addFullyConnectedLayer(26);
 		
 		
 		NetworkParameters.setEpoch(200);
-		NetworkParameters.setStochastic(10);
+		NetworkParameters.setStochastic(200);
 		
 		NetworkParameters.setCnnEpoch(5);
 		NetworkParameters.setCnnGeneration(20);
 		
-		NetworkParameters.setImageSize(37);
+		NetworkParameters.setImageSize(25);
 		
-		NetworkParameters.setLearningRate(0.3);
-		NetworkParameters.setMomentumFactor(0.01);
+		NetworkParameters.setLearningRate(0.2);
+		NetworkParameters.setMomentumFactor(0.05);
 		NetworkParameters.setCnnLearningRate(0.05);
 		
 		NetworkParameters.setKernelRandomization(0.1);

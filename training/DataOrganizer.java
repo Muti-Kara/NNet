@@ -12,22 +12,23 @@ import preproccess.images.InputImage;
 * @author Muti Kara
 */
 public class DataOrganizer {	
-	InputImage images;
+	Matrix[] inputs = new Matrix[NetworkParameters.stochastic];
+	int[] shuffled = new int[NetworkParameters.stochastic];
 	
-	Matrix[] inputs = new Matrix[NetworkParameters.dataSize];
+	InputImage images;
 	Matrix answers;
 	
-	int[] shuffled = new int[NetworkParameters.stochastic];
 	Random rand = new Random();
 	
 	public DataOrganizer(InputImage images) {
 		answers = images.getAnswers();
 		this.images = images;
+		shuffle();
 	}
 	
 	public void convert(CNN cnn) {
-		for(int i = 0; i < NetworkParameters.dataSize; i++){
-			inputs[i] = cnn.forwardPropagation( images.getInputs(i) );
+		for(int i = 0; i < NetworkParameters.stochastic; i++){
+			inputs[i] = cnn.forwardPropagation( images.getInput(shuffled[i]) );
 		}
 	}
 	
@@ -38,7 +39,7 @@ public class DataOrganizer {
 	}
 	
 	public Matrix getInput(int index) {
-		return inputs[ shuffled[index] ];
+		return inputs[index];
 	}
 	
 	public Matrix getAnswer(int index) {

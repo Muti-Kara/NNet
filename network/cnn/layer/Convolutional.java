@@ -29,19 +29,6 @@ public class Convolutional {
 	}
 	
 	/**
-	* Creates new convolutional layer from parent.
-	* @param conv
-	 */
-	public Convolutional(Convolutional conv) {
-		kernels = new Matrix[conv.kernels.length];
-		kernelBiases = MatrixTools.generate(conv.getKernelBiases());
-		this.kernelSize = conv.kernelSize;
-		for(int i = 0; i < kernels.length; i++){
-			kernels[i] = MatrixTools.generate(conv.getKernel(i));
-		}
-	}
-	
-	/**
 	* Takes a matrix array as input. Applies its kernel with step size 1.
 	* @param input
 	* @return output for next layers
