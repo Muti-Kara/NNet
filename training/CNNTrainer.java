@@ -13,7 +13,7 @@ import algebra.matrix.*;
 */
 public class CNNTrainer {
 	Matrix[] input = new Matrix[NetworkParameters.dataSize];
-	InputImage dataImg;
+	InputImage images;
 	CNN convNet = new CNN();
 	CNN candidate;
 	ANN ann = new ANN();
@@ -21,7 +21,7 @@ public class CNNTrainer {
 	double penalty = 1e3;
 	
 	public CNNTrainer(InputImage img) {
-		dataImg = img;
+		images = img;
 	}
 	
 	public void train() {
@@ -45,7 +45,7 @@ public class CNNTrainer {
 	
 	public ANN miniTrainmentANN() {
 		ANN ann = new ANN();
-		DataOrganizer organizer = new DataOrganizer(dataImg);
+		DataOrganizer organizer = new DataOrganizer(images);
 		ANNTrainer trainer = new ANNTrainer(ann);
 		organizer.convert(candidate);
 		trainer.train(organizer);
@@ -56,8 +56,8 @@ public class CNNTrainer {
 		NeuralNetwork network = new NeuralNetwork(convNet, neuralNet);
 		double kernelFailures = 0;
 		for(int i = 0; i < NetworkParameters.dataSize; i++){
-			String str = network.classify( dataImg.getInputs(i) );
-			char character = dataImg.getAnswer(i);
+			String str = network.classify( images.getInputs(i) );
+			char character = images.getAnswer(i);
 			if(character == str.charAt(0))
 				kernelFailures -= Double.parseDouble(str.substring(str.indexOf(' ')));
 			else

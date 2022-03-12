@@ -35,7 +35,8 @@ public class Main {
 		NetworkParameters.setKernelRandomization(0.1);
 		NetworkParameters.setRandomization(0.01);
 		
-		InputImage dataImg = new InputImage();
+		InputImage dataImg = new InputImage("dataset");
+		NetworkParameters.dataSize = dataImg.readFolder();
 		
 		CNNTrainer trainer = new CNNTrainer(dataImg);
 		trainer.train();

@@ -87,7 +87,7 @@ public class ImageBuffer {
 			for(int h = 0; h < height; h++){
 				int p = image.getRGB(w, h);
 				int b = p & 0xff;
-				matrix.set(w, h, b);
+				matrix.set(w, h, b == 0 ? 0 : 1);
 			}
 		}
 		return matrix;
