@@ -72,18 +72,21 @@ public class MatrixTools {
 		return vector;
 	}
 	
-	public static Matrix generate(Matrix parent) {
+	/**
+	* Generates a new matrix from given parent matrix
+	* @param parent
+	* @param row
+	* @return child matrix
+	*/
+	public static Matrix generate(Matrix parent, int r) {
 		Matrix child = new Matrix(parent.getRow(), parent.getCol());
 		Random rand = new Random();
-		
-		for(int r = 0; r < child.getRow(); r++){
-			for(int c = 0; c < child.getCol(); c++){
-				child.set(r, c, parent.get(r, c) + rand.nextGaussian() * NetworkParameters.cnnLearningRate);
-			}
+		for(int c = 0; c < child.getCol(); c++){
+			child.set(r, c, parent.get(r, c) + rand.nextGaussian() * NetworkParameters.cnnLearningRate);
 		}
-		
 		return child;
 	}
+	
 }
 
 

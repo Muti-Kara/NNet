@@ -1,9 +1,7 @@
 import java.io.IOException;
 
 import algebra.NetworkParameters;
-import network.NeuralNetwork;
 import preproccess.images.InputImage;
-import preproccess.parameters.Reader;
 import training.CNNTrainer;
 
 
@@ -13,12 +11,10 @@ import training.CNNTrainer;
 public class Main {
 	
 	public static void main(String[] args) throws IOException {
-		
 		NetworkParameters.addConvolutionalLayer(2, 5, 2);
 		NetworkParameters.addConvolutionalLayer(2, 3, 2);
 		NetworkParameters.addFullyConnectedLayer(100);
 		NetworkParameters.addFullyConnectedLayer(26);
-		
 		
 		NetworkParameters.setEpoch(200);
 		NetworkParameters.setStochastic(200);

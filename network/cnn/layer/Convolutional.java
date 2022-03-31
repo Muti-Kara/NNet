@@ -77,6 +77,14 @@ public class Convolutional {
 		this.kernelBiases = kernelBiases;
 	}
 	
+	public Convolutional createClone() {
+		Convolutional convolutional = new Convolutional(kernels.length, kernelSize);
+		for(int i = 0; i < kernels.length; i++){
+			convolutional.setKernel(i, kernels[i].createClone());
+		}
+		return convolutional;
+	}
+	
 	@Override
 	public String toString() {
 		String str = kernelSize + " " + kernels.length + "\n";

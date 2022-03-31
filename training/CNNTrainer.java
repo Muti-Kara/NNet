@@ -1,9 +1,12 @@
 package training;
 
 import network.cnn.*;
+import network.cnn.layer.Convolutional;
 import network.ann.*;
 import network.*;
 import preproccess.images.*;
+
+import java.util.Random;
 
 import algebra.*;
 import algebra.matrix.*;
@@ -14,6 +17,7 @@ import algebra.matrix.*;
 */
 public class CNNTrainer {
 	Matrix[] input = new Matrix[NetworkParameters.dataSize];
+	Random rand = new Random();
 	InputImage images;
 	CNN bestConvNet = new CNN();
 	CNN candidate;
@@ -29,7 +33,7 @@ public class CNNTrainer {
 		for(int j = 0; j < NetworkParameters.cnnEpoch; j++){
 			for(int i = 0; i < NetworkParameters.cnnGeneration; i++){
 				System.out.println("Epoch: " + j + "\tTry: " + i + "\t\tBest: " + best);
-				generateCandidate();
+				generateCandidate(i);
 				ANN candidateTester = miniTrainmentANN();
 				double candidateError = calculateKernelErrors(candidate, candidateTester);
 				if(!Double.isNaN(candidateError) && candidateError < best){
@@ -41,9 +45,17 @@ public class CNNTrainer {
 		}
 	}
 	
-	public void generateCandidate() {
-		// TODO: write a method to generate candidates more logically
+	public void generateCandidate(int k) {
 		candidate = new CNN();
+		int randomInt = rand.nextInt();
+		for(int i = 0; i < NetworkParameters.convolutional.length; i++){
+			Convolutional newLayer = bestConvNet.getConvLayer(i).createClone();
+			if(randomInt % NetworkParameters.convolutional.length == i)
+				for(int j = 0; j < NetworkParameters.convolutional[i]; j++)
+					if(randomInt % NetworkParameters.convolutional[i] == j)
+						newLayer.setKernel(j, MatrixTools.generate(bestConvNet.getConvLayer(i).getKernel(j), randomInt % NetworkParameters.kernel[i]));;
+			candidate.setConvLayer(i, newLayer);
+		}
 	}
 	
 	public ANN miniTrainmentANN() {
@@ -66,7 +78,7 @@ public class CNNTrainer {
 			else
 				kernelFailures += penalty;
 		}
-		return kernelFailures;
+		return kernelFailures / NetworkParameters.dataSize;
 	}
 	
 	public CNN getBest() {
