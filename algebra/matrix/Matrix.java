@@ -1,7 +1,6 @@
 package algebra.matrix;
 
 import java.util.Random;
-import algebra.*;
 
 /**
  * Matrix class for neural network
@@ -58,18 +57,22 @@ public class Matrix {
 	public int getRow() {
 		return row;
 	}
-
+	
+	/**
+	* 
+	* @return converts every element positive
+	*/
+	public Matrix abs() {
+		for(int r = 0; r < row; r++)
+			for(int c = 0; c < col; c++)
+				matrix[r][c] = Math.abs(matrix[r][c]);
+		return this;
+	}
+	
 	/**
 	* 
 	* @return randomly fills the matrix.
 	 */
-	public Matrix randomize() {
-		for(int r = 0; r < row; r++)
-			for(int c = 0; c < col; c++)
-				matrix[r][c] = Math.abs(rand.nextGaussian() * NetworkParameters.randomization);
-		return this;
-	}
-	
 	public Matrix randomize(double d) {
 		for(int r = 0; r < row; r++)
 			for(int c = 0; c < col; c++)
@@ -134,6 +137,8 @@ public class Matrix {
 	public Matrix sum(Matrix B) {
 		if(!(row == B.row && col == B.col)) {
 			System.out.println("Matrix sum error. Size Mismatch.");
+			System.out.println("Row1: " + row + "\tRow2: " + B.row);
+			System.out.println("Col1: " + col + "\tCol2: " + B.col);
 			return null;
 		}
 		for(int r = 0; r < row; r++) {

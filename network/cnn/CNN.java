@@ -1,7 +1,7 @@
 package network.cnn;
 
 import network.cnn.layer.*;
-import algebra.NetworkParameters;
+import algebra.NetworkOrganizer;
 import algebra.matrix.*;
 
 /**
@@ -9,9 +9,9 @@ import algebra.matrix.*;
 * @author Muti Kara
 */
 public class CNN {
-	int[] convolutional = NetworkParameters.convolutional;
-	int[] kernel = NetworkParameters.kernel;
-	int[] pool = NetworkParameters.pool;
+	int[] convolutional = NetworkOrganizer.convolutional;
+	int[] kernel = NetworkOrganizer.kernel;
+	int[] pool = NetworkOrganizer.pool;
 	Convolutional[] convLayers = new Convolutional[convolutional.length];
 	Pooling[] poolLayers = new Pooling[pool.length];
 	
@@ -35,8 +35,8 @@ public class CNN {
 		preOutput[0] = input;
 		
 		for(int i = 0; i < convolutional.length; i++){
-			preOutput = convLayers[i].goForward(preOutput);
-			preOutput = poolLayers[i].goForward(preOutput);
+			preOutput = convLayers[i].forwardPropagation(preOutput);
+			preOutput = poolLayers[i].forwardPropagation(preOutput);
 		}
 		
 		return MatrixTools.flatten(preOutput);

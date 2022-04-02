@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import algebra.matrix.Matrix;
-import algebra.NetworkParameters;
+import algebra.NetworkOrganizer;
 
 /**
 * Image
@@ -37,11 +37,10 @@ public class ImageBuffer {
 		for(int w = 0; w < width; w++){
 			for(int h = 0; h < height; h++){
 				int p = image.getRGB(w, h);
-				int a = p >> 24 & 0xff;
 				int r = p >> 16 & 0xff;
 				int g = p >> 8 & 0xff;
 				int b = p & 0xff;
-				int avg = a * (r + g + b)/3;
+				int avg = (r + g + b)/3;
 				image.setRGB(w, h, (0xff << 24) | (avg << 16) | (avg << 8) | avg);
 			}
 		}
@@ -55,10 +54,12 @@ public class ImageBuffer {
 			for(int h = 0; h < height; h++){
 				int p = image.getRGB(w, h);
 				int b = p & 0xff;
-				if(b < 150)
+				if(b < 100)
 					b = 0;
-				else
+				else if (b > 175)
 					b = 255;
+				else
+					b = 100;
 				image.setRGB(w, h, (0xff << 24) | (b << 16) | (b << 8) | b);
 			}
 		}
@@ -68,8 +69,9 @@ public class ImageBuffer {
 	 * Resizes image
 	 * */
 	public void resize(){
-		width = NetworkParameters.imageSize;
-		height = NetworkParameters.imageSize;
+		//TODO implement noise cleaning
+		width = NetworkOrganizer.imageSize;
+		height = NetworkOrganizer.imageSize;
 		Image resizedImg = image.getScaledInstance(width, height, Image.SCALE_DEFAULT);
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D drawer = image.createGraphics();
@@ -87,7 +89,7 @@ public class ImageBuffer {
 			for(int h = 0; h < height; h++){
 				int p = image.getRGB(w, h);
 				int b = p & 0xff;
-				matrix.set(w, h, b == 0 ? 0 : 1);
+				matrix.set(w, h, b / 100);
 			}
 		}
 		return matrix;

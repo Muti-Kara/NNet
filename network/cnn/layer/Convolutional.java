@@ -1,6 +1,6 @@
 package network.cnn.layer;
 
-import algebra.NetworkParameters;
+import algebra.NetworkOrganizer;
 import algebra.matrix.*;
 
 /**
@@ -23,17 +23,18 @@ public class Convolutional {
 		this.kernelSize = kernelSize;
 		for(int i = 0; i < kernels.length; i++){
 			kernels[i] = new Matrix(kernelSize, kernelSize);
-			kernels[i].randomize(NetworkParameters.kernelRandomization);
+			kernels[i].randomize(NetworkOrganizer.kernelRandomization).abs();
 		}
-		kernelBiases.randomize();
+		kernelBiases.randomize(NetworkOrganizer.kernelRandomization).abs();
 	}
 	
 	/**
-	* Takes a matrix array as input. Applies its kernel with step size 1.
+	* Takes a matrix array as input. Applies its kernel with step size 1
+	* Then applies activation function to each matrix
 	* @param input
 	* @return output for next layers
 	 */
-	public Matrix[] goForward(Matrix[] input) {
+	public Matrix[] forwardPropagation(Matrix[] input) {
 		Matrix[] ans = new Matrix[kernels.length * input.length];
 		for(int i = 0; i < input.length; i++){
 			for(int j = 0; j < kernels.length; j++){
@@ -50,7 +51,7 @@ public class Convolutional {
 						ans[index].set(r, c, result + kernelBiases.get(j, 0));
 					}
 				}
-				MatrixTools.func(ans[index]);
+				MatrixTools.relu(ans[index]);
 			}
 		}
 		return ans;
@@ -88,7 +89,7 @@ public class Convolutional {
 	@Override
 	public String toString() {
 		String str = kernelSize + " " + kernels.length + "\n";
-		str += kernelBiases + "\n";
+		str += kernelBiases.toString() + "\n\n";
 		for(int i = 0; i < kernels.length; i++){
 			str += kernels[i].toString() + "\n";
 		}

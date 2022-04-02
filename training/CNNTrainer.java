@@ -6,8 +6,6 @@ import network.ann.*;
 import network.*;
 import preproccess.images.*;
 
-import java.util.Random;
-
 import algebra.*;
 import algebra.matrix.*;
 
@@ -16,8 +14,7 @@ import algebra.matrix.*;
 * @author Muti Kara
 */
 public class CNNTrainer {
-	Matrix[] input = new Matrix[NetworkParameters.dataSize];
-	Random rand = new Random();
+	Matrix[] input = new Matrix[NetworkOrganizer.dataSize];
 	InputImage images;
 	CNN bestConvNet = new CNN();
 	CNN candidate;
@@ -30,8 +27,9 @@ public class CNNTrainer {
 	}
 	
 	public void train() {
-		for(int j = 0; j < NetworkParameters.cnnEpoch; j++){
-			for(int i = 0; i < NetworkParameters.cnnGeneration; i++){
+		for(int j = 0; j < NetworkOrganizer.cnnEpoch; j++){
+			for(int i = 0; i < NetworkOrganizer.cnnGeneration; i++){
+				System.out.print("\033[H\033[2J");
 				System.out.println("Epoch: " + j + "\tTry: " + i + "\t\tBest: " + best);
 				generateCandidate(i);
 				ANN candidateTester = miniTrainmentANN();
@@ -47,13 +45,14 @@ public class CNNTrainer {
 	
 	public void generateCandidate(int k) {
 		candidate = new CNN();
-		int randomInt = rand.nextInt();
-		for(int i = 0; i < NetworkParameters.convolutional.length; i++){
+		for(int i = 0; i < NetworkOrganizer.convolutional.length; i++){
 			Convolutional newLayer = bestConvNet.getConvLayer(i).createClone();
-			if(randomInt % NetworkParameters.convolutional.length == i)
-				for(int j = 0; j < NetworkParameters.convolutional[i]; j++)
-					if(randomInt % NetworkParameters.convolutional[i] == j)
-						newLayer.setKernel(j, MatrixTools.generate(bestConvNet.getConvLayer(i).getKernel(j), randomInt % NetworkParameters.kernel[i]));;
+			if(k % NetworkOrganizer.convolutional.length == i)
+				for(int j = 0; j < NetworkOrganizer.convolutional[i]; j++)
+					if(k % NetworkOrganizer.convolutional[i] == j){
+						newLayer.setKernel(j, MatrixTools.generate(bestConvNet.getConvLayer(i).getKernel(j), k % NetworkOrganizer.kernel[i], NetworkOrganizer.cnnLearningRate));;
+						System.out.println(i + ", " + j + ", " + k % NetworkOrganizer.kernel[i]);
+					}
 			candidate.setConvLayer(i, newLayer);
 		}
 	}
@@ -70,15 +69,16 @@ public class CNNTrainer {
 	public double calculateKernelErrors(CNN convNet, ANN neuralNet) {
 		NeuralNetwork network = new NeuralNetwork(convNet, neuralNet);
 		double kernelFailures = 0;
-		for(int i = 0; i < NetworkParameters.dataSize; i++){
+		for(int i = 0; i < NetworkOrganizer.dataSize; i++){
 			String str = network.classify( images.getInput(i) );
 			char character = images.getAnswer(i);
+			System.out.println(str + " : " + character);
 			if(character == str.charAt(0))
 				kernelFailures -= Double.parseDouble( str.substring(str.indexOf(' ')) );
 			else
 				kernelFailures += penalty;
 		}
-		return kernelFailures / NetworkParameters.dataSize;
+		return kernelFailures / NetworkOrganizer.dataSize;
 	}
 	
 	public CNN getBest() {

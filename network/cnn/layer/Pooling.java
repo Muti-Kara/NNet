@@ -22,7 +22,7 @@ public class Pooling {
 	* @param input
 	* @return pooled output for next layer
 	 */
-	public Matrix[] goForward(Matrix[] input) {
+	public Matrix[] forwardPropagation(Matrix[] input) {
 		Matrix[] ans = new Matrix[input.length];
 		for(int i = 0; i < input.length; i++){
 			ans[i] = new Matrix(input[i].getRow() / size + 1, input[i].getCol() / size + 1);

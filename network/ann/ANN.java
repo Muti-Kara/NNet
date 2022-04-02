@@ -1,15 +1,15 @@
 package network.ann;
 
-import network.ann.layer.*;
-import algebra.NetworkParameters;
-import algebra.matrix.*;
+import network.ann.layer.FullyConnected;
+import algebra.NetworkOrganizer;
+import algebra.matrix.Matrix;
 
 /**
  * A FC network
  * @author Muti Kara
  * */
 public class ANN {
-	int[] structure = NetworkParameters.structure;
+	int[] structure = NetworkOrganizer.structure;
 	FullyConnected[] layers = new FullyConnected[structure.length];
 	
 	/**
@@ -29,7 +29,7 @@ public class ANN {
 	public Matrix forwardPropagation(Matrix input) {
 		Matrix output = input.createClone();
 		for(int layer = 1; layer < structure.length; layer++) {
-			output = layers[layer].goForward(output, layer == structure.length - 1);
+			output = layers[layer].forwardPropagation(output, layer == structure.length - 1);
 		}
 		return output;
 	}

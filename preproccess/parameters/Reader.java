@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import algebra.NetworkParameters;
+import algebra.NetworkOrganizer;
 import algebra.matrix.Matrix;
 import network.NeuralNetwork;
 import network.ann.ANN;
@@ -26,7 +26,7 @@ public class Reader {
 	}
 	
 	public static CNN readCNN() throws FileNotFoundException {
-		cnnIn = new Scanner(new File(NetworkParameters.readDir + "/parameters/cnn/CNN.txt"));
+		cnnIn = new Scanner(new File(NetworkOrganizer.readDir + "/parameters/cnn/CNN.txt"));
 		CNN cnn = new CNN();
 		int length = cnnIn.nextInt();
 		
@@ -60,10 +60,10 @@ public class Reader {
 	}
 	
 	public static ANN readANN() throws FileNotFoundException {
-		annIn = new Scanner(new File(NetworkParameters.readDir + "/parameters/ann/ANN.txt"));
+		annIn = new Scanner(new File(NetworkOrganizer.readDir + "/parameters/ann/ANN.txt"));
 		ANN ann = new ANN();
 		
-		for(int i = 1; i < NetworkParameters.structure.length; i++){
+		for(int i = 1; i < NetworkOrganizer.structure.length; i++){
 			ann.setLayer(i, readFullyConnectedLayer());
 		}
 		

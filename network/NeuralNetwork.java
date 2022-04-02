@@ -1,8 +1,8 @@
 package network;
 
-import algebra.matrix.*;
-import network.ann.*;
-import network.cnn.*;
+import algebra.matrix.Matrix;
+import network.ann.ANN;
+import network.cnn.CNN;
 
 /**
 * A feed forward network.

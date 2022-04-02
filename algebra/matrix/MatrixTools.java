@@ -1,20 +1,20 @@
 package algebra.matrix;
 
 import java.util.Random;
-import algebra.*;
 
 /**
 * MatrixTools
 * @author Muti Kara
 */
 public class MatrixTools {
+	static Random rand = new Random();
 	
 	/**
 	* Applies ReLU activation function to all of the parameters.
 	* @param matrix
 	* @return matrix itself
 	 */
-	public static Matrix func(Matrix matrix){
+	public static Matrix relu(Matrix matrix){
 		for(int r = 0; r < matrix.getRow(); r++) {
 			for(int c = 0; c < matrix.getCol(); c++) {
 				matrix.set(r, c, Math.max(0, matrix.get(r, c))); 
@@ -28,7 +28,7 @@ public class MatrixTools {
 	* @param matrix
 	* @return matrix itself
 	 */
-	public static Matrix d_func(Matrix matrix) {
+	public static Matrix d_relu(Matrix matrix) {
 		for(int r = 0; r < matrix.getRow(); r++) {
 			for(int c = 0; c < matrix.getCol(); c++) {
 				matrix.set(r, c, (matrix.get(r, c) <= 0)? 0 : 1);
@@ -73,21 +73,17 @@ public class MatrixTools {
 	}
 	
 	/**
-	* Generates a new matrix from given parent matrix
+	* Generates a new matrix by changing a row of parent matrix
 	* @param parent
 	* @param row
 	* @return child matrix
 	*/
-	public static Matrix generate(Matrix parent, int r) {
+	public static Matrix generate(Matrix parent, int r, double rate) {
 		Matrix child = new Matrix(parent.getRow(), parent.getCol());
-		Random rand = new Random();
 		for(int c = 0; c < child.getCol(); c++){
-			child.set(r, c, parent.get(r, c) + rand.nextGaussian() * NetworkParameters.cnnLearningRate);
+			child.set(r, c, parent.get(r, c) + rand.nextGaussian() * rate);
 		}
 		return child;
 	}
 	
 }
-
-
-

@@ -1,0 +1,3 @@
+Implement an image parser
+Implement 5 categories for each pixels
+Find or create a proper dataset

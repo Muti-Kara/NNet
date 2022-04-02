@@ -1,6 +1,7 @@
+import java.io.FileWriter;
 import java.io.IOException;
 
-import algebra.NetworkParameters;
+import algebra.NetworkOrganizer;
 import preproccess.images.InputImage;
 import training.CNNTrainer;
 
@@ -11,31 +12,35 @@ import training.CNNTrainer;
 public class Main {
 	
 	public static void main(String[] args) throws IOException {
-		NetworkParameters.addConvolutionalLayer(2, 5, 2);
-		NetworkParameters.addConvolutionalLayer(2, 3, 2);
-		NetworkParameters.addFullyConnectedLayer(100);
-		NetworkParameters.addFullyConnectedLayer(26);
+		NetworkOrganizer.addConvolutionalLayer(2, 3, 2);
+		NetworkOrganizer.addConvolutionalLayer(2, 3, 2);
+		NetworkOrganizer.addFullyConnectedLayer(256);
+		NetworkOrganizer.addFullyConnectedLayer(3);
 		
-		NetworkParameters.setEpoch(200);
-		NetworkParameters.setStochastic(200);
+		NetworkOrganizer.setEpoch(150);
+		NetworkOrganizer.setStochastic(100);
 		
-		NetworkParameters.setCnnEpoch(5);
-		NetworkParameters.setCnnGeneration(20);
+		NetworkOrganizer.setCnnEpoch(10);
+		NetworkOrganizer.setCnnGeneration(18);
 		
-		NetworkParameters.setImageSize(25);
+		NetworkOrganizer.setImageSize(35);
 		
-		NetworkParameters.setLearningRate(0.2);
-		NetworkParameters.setMomentumFactor(0.05);
-		NetworkParameters.setCnnLearningRate(0.05);
+		NetworkOrganizer.setLearningRate(0.02);
+		NetworkOrganizer.setMomentumFactor(0.01);
+		NetworkOrganizer.setCnnLearningRate(0.01);
 		
-		NetworkParameters.setKernelRandomization(0.1);
-		NetworkParameters.setRandomization(0.01);
+		NetworkOrganizer.setKernelRandomization(0.1);
+		NetworkOrganizer.setRandomization(0.01);
 		
-		InputImage dataImg = new InputImage("dataset");
-		NetworkParameters.dataSize = dataImg.readFolder();
+		InputImage dataImg = new InputImage("dataset", 'A', 'C');
+		NetworkOrganizer.dataSize = dataImg.readFolder();
 		
 		CNNTrainer trainer = new CNNTrainer(dataImg);
 		trainer.train();
+		
+		//try (FileWriter writer = new FileWriter("RR")) {
+		//	writer.write(trainer.getBest().toString());
+		//}
 		
 		// NeuralNetwork network = Reader.readNN();
 		// for(int index = 0; index < NetworkParameters.testSize; index++){

@@ -2,7 +2,7 @@ package training;
 
 import java.util.Random;
 
-import algebra.NetworkParameters;
+import algebra.NetworkOrganizer;
 import algebra.matrix.Matrix;
 import network.cnn.CNN;
 import preproccess.images.InputImage;
@@ -12,8 +12,8 @@ import preproccess.images.InputImage;
 * @author Muti Kara
 */
 public class DataOrganizer {	
-	Matrix[] inputs = new Matrix[NetworkParameters.stochastic];
-	int[] shuffled = new int[NetworkParameters.stochastic];
+	Matrix[] inputs = new Matrix[NetworkOrganizer.stochastic];
+	int[] shuffled = new int[NetworkOrganizer.stochastic];
 	
 	InputImage images;
 	Matrix answers;
@@ -27,14 +27,14 @@ public class DataOrganizer {
 	}
 	
 	public void convert(CNN cnn) {
-		for(int i = 0; i < NetworkParameters.stochastic; i++){
+		for(int i = 0; i < NetworkOrganizer.stochastic; i++){
 			inputs[i] = cnn.forwardPropagation( images.getInput(shuffled[i]) );
 		}
 	}
 	
 	public void shuffle() {
 		for(int i = 0; i < shuffled.length; i++){
-			shuffled[i] = rand.nextInt(NetworkParameters.dataSize);
+			shuffled[i] = rand.nextInt(NetworkOrganizer.dataSize);
 		}
 	}
 	

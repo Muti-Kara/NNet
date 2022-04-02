@@ -5,11 +5,11 @@ package algebra;
 * A class for global variables and hyper parameters of network.
 * @author Muti Kara
 */
-public class NetworkParameters {
+public class NetworkOrganizer {
 	/**
 	 * Project directory.
 	 * */
-	public static String readDir = "/home/yuio/project/neuralnet/preproccess/";
+	public static String readDir = "/home/yuio/Projects/neuralnet/preproccess/";
 	
 	/**
 	 * Structure of neural network.
@@ -59,22 +59,22 @@ public class NetworkParameters {
 	public static int stochastic;
 	
 	public static void setEpoch(int epoch) {
-		NetworkParameters.epoch = epoch;
+		NetworkOrganizer.epoch = epoch;
 	}
 	
 	public static void setStochastic(int stochastic) {
-		NetworkParameters.stochastic = stochastic;
+		NetworkOrganizer.stochastic = stochastic;
 	}
 	
 	public static int cnnEpoch;
 	public static int cnnGeneration;
 	
 	public static void setCnnEpoch(int cnnEpoch) {
-		NetworkParameters.cnnEpoch = cnnEpoch;
+		NetworkOrganizer.cnnEpoch = cnnEpoch;
 	}
 	
 	public static void setCnnGeneration(int cnnGeneration) {
-		NetworkParameters.cnnGeneration = cnnGeneration;
+		NetworkOrganizer.cnnGeneration = cnnGeneration;
 	}
 	
 	/**
@@ -83,27 +83,27 @@ public class NetworkParameters {
 	public static int imageSize;
 	
 	public static void setImageSize(int imageSize) {
-		NetworkParameters.imageSize = imageSize;
+		NetworkOrganizer.imageSize = imageSize;
 	}
 	
 	/**
 	 * Learning rate and momentum factor of artificial neural network
 	 * Learning rate of CNN
 	 * */
-	public static double learningRate;
+	public static double annLearningRate;
 	public static double cnnLearningRate;
 	public static double momentumFactor;
 	
 	public static void setLearningRate(double learningRate) {
-		NetworkParameters.learningRate = learningRate;
+		NetworkOrganizer.annLearningRate = learningRate;
 	}
 	
 	public static void setCnnLearningRate(double cnnLearningRate) {
-		NetworkParameters.cnnLearningRate = cnnLearningRate;
+		NetworkOrganizer.cnnLearningRate = cnnLearningRate;
 	}
 	
 	public static void setMomentumFactor(double momentumFactor) {
-		NetworkParameters.momentumFactor = momentumFactor;
+		NetworkOrganizer.momentumFactor = momentumFactor;
 	}
 	
 	/**
@@ -113,10 +113,10 @@ public class NetworkParameters {
 	public static double kernelRandomization;
 	
 	public static void setRandomization(double randomization) {
-		NetworkParameters.randomization = randomization;
+		NetworkOrganizer.randomization = randomization;
 	}
 	
 	public static void setKernelRandomization(double kernelRandomization) {
-		NetworkParameters.kernelRandomization = kernelRandomization;
+		NetworkOrganizer.kernelRandomization = kernelRandomization;
 	}
 }
