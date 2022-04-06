@@ -1,6 +1,6 @@
-package network.ann.layer;
+package neuralnet.network.ann.layer;
 
-import algebra.matrix.*;
+import neuralnet.algebra.matrix.*;
 
 /**
 * Fully Connected Layer

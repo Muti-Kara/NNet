@@ -1,11 +1,11 @@
-package training;
+package neuralnet.training;
 
 import java.util.Random;
 
-import algebra.NetworkOrganizer;
-import algebra.matrix.Matrix;
-import network.cnn.CNN;
-import preproccess.images.InputImage;
+import neuralnet.algebra.NetworkOrganizer;
+import neuralnet.algebra.matrix.Matrix;
+import neuralnet.network.cnn.CNN;
+import neuralnet.preproccess.images.ImageOrganizer;
 
 /**
 * Data organizer for ann
@@ -15,12 +15,12 @@ public class DataOrganizer {
 	Matrix[] inputs = new Matrix[NetworkOrganizer.stochastic];
 	int[] shuffled = new int[NetworkOrganizer.stochastic];
 	
-	InputImage images;
+	ImageOrganizer images;
 	Matrix answers;
 	
 	Random rand = new Random();
 	
-	public DataOrganizer(InputImage images) {
+	public DataOrganizer(ImageOrganizer images) {
 		answers = images.getAnswers();
 		this.images = images;
 		shuffle();

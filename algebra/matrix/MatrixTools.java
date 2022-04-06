@@ -1,4 +1,4 @@
-package algebra.matrix;
+package neuralnet.algebra.matrix;
 
 import java.util.Random;
 

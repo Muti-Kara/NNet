@@ -1,4 +1,4 @@
-package algebra.matrix;
+package neuralnet.algebra.matrix;
 
 import java.util.Random;
 
@@ -20,6 +20,16 @@ public class Matrix {
 		matrix = new double[row][col];
 		this.col = col;
 		this.row = row;		
+	}
+	
+	/**
+	* Creates a matrix object from given 2d array
+	* @param matrix
+	*/
+	public Matrix(double[][] matrix) {
+		this.matrix = matrix;
+		row = matrix.length;
+		col = matrix[0].length;
 	}
 	
 	/**

@@ -1,8 +1,8 @@
-package network.ann;
+package neuralnet.network.ann;
 
-import network.ann.layer.FullyConnected;
-import algebra.NetworkOrganizer;
-import algebra.matrix.Matrix;
+import neuralnet.network.ann.layer.FullyConnected;
+import neuralnet.algebra.NetworkOrganizer;
+import neuralnet.algebra.matrix.Matrix;
 
 /**
  * A FC network

@@ -1,18 +1,18 @@
-package preproccess.images;
+package neuralnet.preproccess.images;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import algebra.NetworkOrganizer;
-import algebra.matrix.Matrix;
+import neuralnet.algebra.NetworkOrganizer;
+import neuralnet.algebra.matrix.Matrix;
 
 /**
 * InputImage
 * This class reads a folder and gets the input and answer.
 * @author Muti Kara
 */
-public class InputImage {
+public class ImageOrganizer {
 	char start, end;
 	int numOfData;
 	String folderName = NetworkOrganizer.readDir + "/images/data/";
@@ -24,7 +24,7 @@ public class InputImage {
 	* These folders consists of 26 sub folders each named with an upper case english letter.
 	* @throws IOException
 	 */
-	public InputImage(String folderName, char start, char end) throws IOException{
+	public ImageOrganizer(String folderName, char start, char end) throws IOException{
 		this.start = start;
 		this.end = end;
 		this.folderName += folderName + "/";
@@ -45,12 +45,13 @@ public class InputImage {
 		for(int i = 0; i < fileNames.size(); i++){
 			String file = fileNames.get(i).substring(0, fileNames.get(i).length() - 2);
 			char character = fileNames.get(i).charAt(fileNames.get(i).length() - 1);
-			ImageBuffer img = new ImageBuffer(folderName + character + "/" + file);
-			img.resize();
-			img.turnBlackAndWhite();
-			img.maximizeContrast();
-			img.write(NetworkOrganizer.readDir + "/images/check/" + character + "/" + file);
-			inputs[i] = img.getMatrix();
+			// TODO read image and convert it to a matrix
+			// GrayBuffer img = new GrayBuffer(folderName + character + "/" + file);
+			// img.resize();
+			// img.turnBlackAndWhite();
+			// img.maximizeContrast();
+			// img.write(NetworkOrganizer.readDir + "/images/check/" + character + "/" + file);
+			// inputs[i] = img.getMatrix();
 			answers.set(i, character - 'A', 1);
 		}
 		return fileNames.size();

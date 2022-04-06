@@ -1,8 +1,8 @@
-package network.cnn;
+package neuralnet.network.cnn;
 
-import network.cnn.layer.*;
-import algebra.NetworkOrganizer;
-import algebra.matrix.*;
+import neuralnet.network.cnn.layer.*;
+import neuralnet.algebra.NetworkOrganizer;
+import neuralnet.algebra.matrix.*;
 
 /**
 * A simple convolutional network

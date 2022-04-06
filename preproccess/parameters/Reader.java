@@ -1,17 +1,17 @@
-package preproccess.parameters;
+package neuralnet.preproccess.parameters;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import algebra.NetworkOrganizer;
-import algebra.matrix.Matrix;
-import network.NeuralNetwork;
-import network.ann.ANN;
-import network.ann.layer.FullyConnected;
-import network.cnn.CNN;
-import network.cnn.layer.Convolutional;
-import network.cnn.layer.Pooling;
+import neuralnet.algebra.NetworkOrganizer;
+import neuralnet.algebra.matrix.Matrix;
+import neuralnet.network.NeuralNetwork;
+import neuralnet.network.ann.ANN;
+import neuralnet.network.ann.layer.FullyConnected;
+import neuralnet.network.cnn.CNN;
+import neuralnet.network.cnn.layer.Convolutional;
+import neuralnet.network.cnn.layer.Pooling;
 
 /**
 * Reader class to read pretrained networks.

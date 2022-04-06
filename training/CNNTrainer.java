@@ -1,13 +1,13 @@
-package training;
+package neuralnet.training;
 
-import network.cnn.*;
-import network.cnn.layer.Convolutional;
-import network.ann.*;
-import network.*;
-import preproccess.images.*;
+import neuralnet.network.cnn.*;
+import neuralnet.network.cnn.layer.Convolutional;
+import neuralnet.network.ann.*;
+import neuralnet.network.*;
+import neuralnet.preproccess.images.*;
 
-import algebra.*;
-import algebra.matrix.*;
+import neuralnet.algebra.*;
+import neuralnet.algebra.matrix.*;
 
 /**
 * CNNTrainer
@@ -15,14 +15,14 @@ import algebra.matrix.*;
 */
 public class CNNTrainer {
 	Matrix[] input = new Matrix[NetworkOrganizer.dataSize];
-	InputImage images;
+	ImageOrganizer images;
 	CNN bestConvNet = new CNN();
 	CNN candidate;
 	ANN ann = new ANN();
 	double best = 1e7;
 	double penalty = 1e3;
 	
-	public CNNTrainer(InputImage images) {
+	public CNNTrainer(ImageOrganizer images) {
 		this.images = images;
 	}
 	

@@ -1,7 +1,7 @@
-package network.cnn.layer;
+package neuralnet.network.cnn.layer;
 
-import algebra.NetworkOrganizer;
-import algebra.matrix.*;
+import neuralnet.algebra.NetworkOrganizer;
+import neuralnet.algebra.matrix.*;
 
 /**
 * Convolutional Layer
