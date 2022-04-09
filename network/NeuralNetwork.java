@@ -1,5 +1,7 @@
 package neuralnet.network;
 
+import java.util.Scanner;
+
 import neuralnet.algebra.matrix.Matrix;
 import neuralnet.network.ann.ANN;
 import neuralnet.network.cnn.CNN;
@@ -8,7 +10,7 @@ import neuralnet.network.cnn.CNN;
 * A feed forward network.
 * @author Muti Kara
 */
-public class NeuralNetwork {
+public class NeuralNetwork implements Forwardable<Matrix> {
 	CNN cnn;
 	ANN ann;
 	
@@ -25,15 +27,6 @@ public class NeuralNetwork {
 	/**
 	* 
 	* @param input
-	* @return Resulting matrix after forward propagating cnn and ann
-	 */
-	public Matrix forwardPropagation(Matrix input){
-		return ann.forwardPropagation( cnn.forwardPropagation(input) );
-	}
-	
-	/**
-	* 
-	* @param input
 	* @return class of input
 	 */
 	public String classify(Matrix input){
@@ -45,9 +38,25 @@ public class NeuralNetwork {
 		return (char) (max + 'A') + " " + ans.get(max, 0);
 	}
 	
+	/**
+	* 
+	* @param input
+	* @return Resulting matrix after forward propagating cnn and ann
+	 */
+	@Override
+	public Matrix forwardPropagation(Matrix inputs) {
+	 	return ann.forwardPropagation( cnn.forwardPropagation(inputs) );
+	}
+	
 	@Override
 	public String toString() {
 		return cnn.toString() + "\n" + ann.toString();
 	}
-	
+
+	@Override
+	public void read(Scanner in) {
+		
+	}
+
+
 }

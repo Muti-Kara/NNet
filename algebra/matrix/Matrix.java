@@ -1,12 +1,15 @@
 package neuralnet.algebra.matrix;
 
 import java.util.Random;
+import java.util.Scanner;
+
+import neuralnet.Learnable;
 
 /**
  * Matrix class for neural network
  * @author Muti Kara
  * */
-public class Matrix {
+public class Matrix implements Learnable {
 	Random rand = new Random();
 	double[][] matrix;
 	int col, row;
@@ -250,5 +253,10 @@ public class Matrix {
 		}
 		return str;
 	}
-	
+
+	@Override
+	public void read(Scanner in) {
+		
+	}
+
 }

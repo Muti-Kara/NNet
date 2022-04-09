@@ -60,6 +60,9 @@ public class MatrixTools {
 	* @return flattened matrix array
 	 */
 	public static Matrix flatten(Matrix[] matArray){
+		if (matArray.length == 1)
+			return matArray[0];
+		
 		Matrix vector = new Matrix(matArray.length * matArray[0].getRow() * matArray[0].getCol(), 1);
 		int k = 0;
 		for(int i = 0; i < matArray.length; i++){

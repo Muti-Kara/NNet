@@ -1,4 +1,4 @@
-package neuralnet.network.cnn.layer;
+package neuralnet.network.layer;
 
 import neuralnet.algebra.matrix.Matrix;
 
@@ -6,7 +6,7 @@ import neuralnet.algebra.matrix.Matrix;
 * Pooling Layer
 * @author Muti Kara
 */
-public class Pooling {
+public class Pooling extends Layer {
 	int size;
 	
 	/**
@@ -15,6 +15,8 @@ public class Pooling {
 	 */
 	public Pooling(int size){
 		this.size = size;
+		bias = new Matrix(0, 0);
+		parameters = new Matrix[0];
 	}
 	
 	/**
@@ -40,10 +42,5 @@ public class Pooling {
 		}
 		
 		return ans;
-	}
-	
-	@Override
-	public String toString() {
-		return "\n" + size + "\n";
 	}
 }
