@@ -1,5 +1,7 @@
-package neuralnet.algebra.matrix;
+package neuralnet.matrix;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -13,6 +15,27 @@ public class Matrix implements Learnable {
 	Random rand = new Random();
 	double[][] matrix;
 	int col, row;
+	
+	/**
+	* Converts the matrix array to a vector.
+	* @param matArray
+	* @return flattened matrix array
+	 */
+	public static Matrix flatten(Matrix[] matArray){
+		if (matArray.length == 1)
+			return matArray[0];
+		
+		Matrix vector = new Matrix(matArray.length * matArray[0].getRow() * matArray[0].getCol(), 1);
+		int k = 0;
+		for(int i = 0; i < matArray.length; i++){
+			for(int r = 0; r < matArray[i].getRow(); r++){
+				for(int c = 0; c < matArray[i].getCol(); c++){
+					vector.set(k++, 0, matArray[i].get(r, c));
+				}
+			}
+		}
+		return vector;
+	}
 	
 	/**
 	* Creates a zero matrix.
@@ -182,30 +205,12 @@ public class Matrix implements Learnable {
 	}
 	
 	/**
-	* Multiplies two matrices element wise.
-	* It happens in place. For convenience it returns this matrix.
-	* @param B
-	* @return this
-	 */
-	public Matrix ewProd(Matrix B) {
-		if(!(row == B.row && col == B.col)) {
-			System.out.println("Matrix exProd error. Size Mismatch.");
-		}
-		for(int r = 0; r < row; r++) {
-			for(int c = 0; c < col; c++) {
-				matrix[r][c] *= B.matrix[r][c];
-			}
-		}
-		return this;
-	}
-	
-	/**
 	* Multiplies this matrix with a double b.
 	* It happens in place. For convenience it returns this matrix.
 	* @param B
 	* @return this
 	 */
-	public Matrix sProd(double b) {
+	public Matrix scalarProd(double b) {
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
 				matrix[r][c] *= b;
@@ -220,7 +225,7 @@ public class Matrix implements Learnable {
 	* @param B
 	* @return this
 	 */
-	public Matrix sSum(double b) {
+	public Matrix scalarSum(double b) {
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
 				matrix[r][c] += b;
@@ -233,7 +238,7 @@ public class Matrix implements Learnable {
 	* 
 	* @return transpose of this matrix.
 	 */
-	public Matrix T() {
+	public Matrix transpose() {
 		Matrix C = new Matrix(col, row);
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
@@ -254,9 +259,82 @@ public class Matrix implements Learnable {
 		return str;
 	}
 
+	/**
+	 * reads matrix from given Scanner object
+	 * */
 	@Override
 	public void read(Scanner in) {
-		
+		for(int r = 0; r < row; r++)
+			for(int c = 0; c < col; c++)
+				matrix[r][c] = in.nextDouble();
+	}
+	
+	@Override
+	public void write(FileWriter out) {
+		try {
+			out.write( this.toString() );
+		} catch (IOException e) {
+			System.out.println(e.fillInStackTrace());
+		}
 	}
 
+	/**
+	* Applies ReLU activation function to all of the parameters.
+	* @param matrix
+	* @return matrix itself
+	 */
+	public Matrix relu(){
+		for(int r = 0; r < getRow(); r++) {
+			for(int c = 0; c < getCol(); c++) {
+				set(r, c, Math.max(0, get(r, c))); 
+			}
+		}
+		return this;
+	}
+	
+	/**
+	* Applies ReLU activation function's derivative to all of the parameters.
+	* @param matrix
+	* @return matrix itself
+	 */
+	public Matrix d_relu() {
+		for(int r = 0; r < getRow(); r++) {
+			for(int c = 0; c < getCol(); c++) {
+				set(r, c, (get(r, c) <= 0)? 0 : 1);
+			}
+		}
+		return this;
+	}
+	
+	/**
+	* Applies Softmax function to vector.
+	* @param vector
+	* @return vector itself
+	 */
+	public Matrix softmax(){
+		double sum = 0;
+		for(int r = 0; r < getRow(); r++){
+			set(r, 0, Math.exp(get(r, 0)));
+			sum += get(r, 0);
+		}
+		for(int r = 0; r < getRow(); r++){
+			set(r, 0, get(r, 0) / sum);
+		}
+		return this;
+	}
+	
+	/**
+	* Generates a new matrix by changing a row of parent matrix
+	* @param parent
+	* @param row
+	* @return child matrix
+	*/
+	public Matrix generate(int r, double rate) {
+		Matrix child = new Matrix(getRow(), getCol());
+		for(int c = 0; c < child.getCol(); c++){
+			child.set(r, c, get(r, c) + rand.nextGaussian() * rate);
+		}
+		return child;
+	}
+	
 }

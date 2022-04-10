@@ -1,13 +1,13 @@
 package neuralnet.network.layer;
 
-import neuralnet.algebra.NetworkOrganizer;
-import neuralnet.algebra.matrix.*;
+import neuralnet.matrix.Matrix;
 
 /**
 * Convolutional Layer
 * @author Muti Kara
 */
 public class Convolutional extends Layer {
+	final static double KERNEL_RANDOMIZATION = 0.001;
 	int kernelSize;
 	
 	/**
@@ -21,9 +21,9 @@ public class Convolutional extends Layer {
 		this.kernelSize = kernelSize;
 		for(int i = 0; i < parameters.length; i++){
 			parameters[i] = new Matrix(kernelSize, kernelSize);
-			parameters[i].randomize(NetworkOrganizer.kernelRandomization).abs();
+			parameters[i].randomize(KERNEL_RANDOMIZATION).abs();
 		}
-		bias.randomize(NetworkOrganizer.kernelRandomization).abs();
+		bias.randomize(KERNEL_RANDOMIZATION).abs();
 	}
 	
 	/**
@@ -49,21 +49,10 @@ public class Convolutional extends Layer {
 						ans[index].set(r, c, result + bias.get(j, 0));
 					}
 				}
-				MatrixTools.relu(ans[index]);
+				ans[index].relu();
 			}
 		}
 		return ans;
 	}
 	
-	/**
-	* 
-	* @return copy of this layer
-	*/
-	public Convolutional createClone() {
-		Convolutional convolutional = new Convolutional(parameters.length, kernelSize);
-		for(int i = 0; i < parameters.length; i++){
-			convolutional.setParameter(i, parameters[i].createClone());
-		}
-		return convolutional;
-	}
 }

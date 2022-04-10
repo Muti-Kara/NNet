@@ -1,8 +1,6 @@
 package neuralnet.network.net;
 
-import neuralnet.algebra.NetworkOrganizer;
 import neuralnet.network.layer.Convolutional;
-import neuralnet.network.layer.Layer;
 import neuralnet.network.layer.Pooling;
 
 /**
@@ -10,18 +8,30 @@ import neuralnet.network.layer.Pooling;
 * @author Muti Kara
 */
 public class CNN extends Network {
-	int[] convolutional = NetworkOrganizer.convolutional;
-	int[] kernel = NetworkOrganizer.kernel;
-	int[] pool = NetworkOrganizer.pool;
+	final static int CONVOLUTIONAL_LAYER = 1;
+	final static int POOLING_LAYER = 2;
 	
 	/**
-	* Creates a convolutional network.
-	 */
-	public CNN() {
-		layers = new Layer[2 * convolutional.length];
-		for(int i = 0; i < 2 * convolutional.length; i += 2){
-			layers[i] = new Convolutional(convolutional[i], kernel[i]);
-			layers[i + 1] = new Pooling(pool[i]);
+	* Adds a new convolutional layer or a pool layer
+	* @param descriptor
+	* @param type
+	* @return this network
+	*/
+	@Override
+	public Network addLayer(int ... layerDescription) {
+		switch (layerDescription[layerDescription.length - 1]) {
+			case CONVOLUTIONAL_LAYER:
+				layers.add( new Convolutional(layerDescription[0], layerDescription[1]) );
+				return this;
+			
+			case POOLING_LAYER:
+				layers.add( new Pooling(layerDescription[0]) );
+				return this;
+			
+			default:
+				System.out.println("Undefined type of layer.");
+				return null;
 		}
 	}
+	
 }

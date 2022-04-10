@@ -1,17 +1,15 @@
 package neuralnet.training;
 
-import neuralnet.algebra.NetworkOrganizer;
-import neuralnet.algebra.matrix.Matrix;
-import neuralnet.network.ann.ANN;
-import neuralnet.network.ann.layer.FullyConnected;
+import neuralnet.NetworkOrganizer;
+import neuralnet.matrix.Matrix;
+import neuralnet.network.layer.FullyConnected;
+import neuralnet.network.net.ANN;
 
 /**
 * NetworkTrainer
 * @author Muti Kara
 */
 public class ANNTrainer {
-	int[] structure = NetworkOrganizer.structure;
-	int dataSize = NetworkOrganizer.dataSize;
 	int length = structure.length;
 	
 	Matrix[] activation = new Matrix[length];
@@ -28,10 +26,12 @@ public class ANNTrainer {
 	 */
 	public ANNTrainer(ANN net){
 		this.net = net;
-		for(int i = 1; i < length; i++){
-			changes[i] = new FullyConnected(net.getLayer(i).getWeight().getCol(), net.getLayer(i).getWeight().getRow()).randomize(NetworkOrganizer.annLearningRate);
-			previousChanges[i] = new FullyConnected(net.getLayer(i).getWeight().getCol(), net.getLayer(i).getWeight().getRow());
+		for(int i = 1; i < length-1; i++){
+			changes[i] = (FullyConnected) new FullyConnected(net.getLayer(i).getParameter(0).getCol(), net.getLayer(i).getParameter(0).getRow(), FullyConnected.RELU_ACTIVATION).randomize(NetworkOrganizer.annLearningRate);
+			previousChanges[i] = new FullyConnected(net.getLayer(i).getParameter(0).getCol(), net.getLayer(i).getParameter(0).getRow(), FullyConnected.RELU_ACTIVATION);
 		}
+		changes[length-1] = (FullyConnected) new FullyConnected(net.getLayer(length-1).getParameter(0).getCol(), net.getLayer(length-1).getParameter(0).getRow(), FullyConnected.SOFTMAX_ACTIVATION).randomize(NetworkOrganizer.annLearningRate);
+		previousChanges[length-1] = new FullyConnected(net.getLayer(length-1).getParameter(0).getCol(), net.getLayer(length-1).getParameter(0).getRow(), FullyConnected.SOFTMAX_ACTIVATION);
 	}
 	
 	/**
@@ -66,7 +66,7 @@ public class ANNTrainer {
 	public void forwardPropagate(int datum) {
 		activation[0] = organizer.getInput(datum);
 		for(int i = 1; i < length; i++){
-			activation[i] = net.getLayer(i).forwardPropagation(activation[i-1], i == length - 1);
+			activation[i] = net.getLayer(i).forwardPropagation(new Matrix[] { activation[i-1] })[0];
 		}
 	}
 	
@@ -90,7 +90,7 @@ public class ANNTrainer {
 	 * */
 	public void calculateLoss(){
 		for(int j = length - 2; j > 0; j--){
-			errors[j] = net.getLayer(j+1).getWeight().T().dot(errors[j+1]);
+			errors[j] = net.getLayer(j+1).getParameter(0).transpose().dot(errors[j+1]);
 		}
 	}
 	
@@ -99,12 +99,12 @@ public class ANNTrainer {
 	 * */
 	public void calculateChanges() {
 		for(int i = 1; i < length; i++) {
-			previousChanges[i].setWeight(changes[i].getWeight());
+			previousChanges[i].setParameter(0, changes[i].getParameter(0));
 			previousChanges[i].setBias(changes[i].getBias());
 		}
 		for(int j = 1; j < length; j++){
 			changes[j].getBias().sum(errors[j]);
-			changes[j].getWeight().sum(errors[j].dot(activation[j - 1].T()));
+			changes[j].getParameter(0).sum(errors[j].dot(activation[j - 1].transpose()));
 		}
 	}
 	
@@ -113,11 +113,11 @@ public class ANNTrainer {
 	 * */
 	public void applyChanges() {
 		for(int i = 1; i < length; i++){
-			net.getLayer(i).getWeight().sub(changes[i].getWeight().sProd(NetworkOrganizer.annLearningRate));
-			net.getLayer(i).getBias().sub(changes[i].getBias().sProd(NetworkOrganizer.annLearningRate));
+			net.getLayer(i).getParameter(0).sub(changes[i].getParameter(0).scalarProd(NetworkOrganizer.annLearningRate));
+			net.getLayer(i).getBias().sub(changes[i].getBias().scalarProd(NetworkOrganizer.annLearningRate));
 			
-			net.getLayer(i).getWeight().sub(previousChanges[i].getWeight().sProd(NetworkOrganizer.momentumFactor));
-			net.getLayer(i).getBias().sub(previousChanges[i].getBias().sProd(NetworkOrganizer.momentumFactor));
+			net.getLayer(i).getParameter(0).sub(previousChanges[i].getParameter(0).scalarProd(NetworkOrganizer.momentumFactor));
+			net.getLayer(i).getBias().sub(previousChanges[i].getBias().scalarProd(NetworkOrganizer.momentumFactor));
 		}
 	}
 }

@@ -1,8 +1,9 @@
 package neuralnet.network.layer;
 
+import java.io.FileWriter;
 import java.util.Scanner;
 
-import neuralnet.algebra.matrix.Matrix;
+import neuralnet.matrix.Matrix;
 import neuralnet.network.Forwardable;
 
 /**
@@ -13,7 +14,6 @@ public abstract class Layer implements Forwardable<Matrix[]> {
 	Matrix bias;
 	
 	/**
-	* 
 	* @param d
 	* @return randomizes parameters and bias
 	*/
@@ -29,6 +29,13 @@ public abstract class Layer implements Forwardable<Matrix[]> {
 		bias.read(in);
 		for(int i = 0; i < parameters.length; i++)
 			parameters[i].read(in);
+	}
+	
+	@Override
+	public void write(FileWriter out) {
+		bias.write(out);
+		for(int i = 0; i < parameters.length; i++)
+			parameters[i].write(out);;
 	}
 	
 	@Override
@@ -48,11 +55,11 @@ public abstract class Layer implements Forwardable<Matrix[]> {
 		parameters[index] = parameter;
 	}
 
-	public Matrix getBiases() {
+	public Matrix getBias() {
 		return bias;
 	}
 
-	public void setBiases(Matrix biases) {
+	public void setBias(Matrix biases) {
 		this.bias = biases;
 	}
 }

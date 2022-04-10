@@ -1,9 +1,10 @@
 package neuralnet.network.net;
 
+import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-import neuralnet.algebra.matrix.Matrix;
-import neuralnet.algebra.matrix.MatrixTools;
+import neuralnet.matrix.Matrix;
 import neuralnet.network.Forwardable;
 import neuralnet.network.layer.Layer;
 
@@ -11,40 +12,53 @@ import neuralnet.network.layer.Layer;
 * Network
 */
 public abstract class Network implements Forwardable<Matrix> {
-	Layer[] layers;
+	ArrayList<Layer> layers = new ArrayList<>();
 
 	@Override
 	public Matrix forwardPropagation(Matrix inputs) {
 		Matrix[] preOutput = new Matrix[1];
 		preOutput[0] = inputs.createClone();
 		
-		for(int i = 0; i < layers.length; i++) {
-			preOutput = layers[i].forwardPropagation(preOutput);
+		for(Layer layer : layers) {
+			preOutput = layer.forwardPropagation(preOutput);
 		}
 		
-		return MatrixTools.flatten(preOutput);
-	}
-	
-	public Layer getLayer(int index) {
-		return layers[index];
-	}
-	
-	public void setLayers(int index, Layer layer) {
-		layers[index] = layer;
+		return Matrix.flatten(preOutput);
 	}
 	
 	@Override
 	public void read(Scanner in) {
-		for(int i = 0; i < layers.length; i++){
-			layers[i].read(in);
+		for(Layer layer : layers){
+			layer.read(in);
 		}
 	}
 	
 	@Override
+	public void write(FileWriter out) {
+		for(Layer layer : layers){
+			layer.write(out);;
+		}
+	}
+	
+	public int getDepth() {
+		return layers.size();
+	}
+	
+	abstract Network addLayer(int ... layerDescription);
+	
+	public Layer getLayer(int index) {
+		return layers.get(index);
+	}
+	
+	public void setLayers(int index, Layer layer) {
+		layers.set(index, layer);
+	}
+	
+	@Override
 	public String toString() {
-		String str = layers.length + "\n";
-		for(int i = 0; i < layers.length; i++){
-			str += layers[i].toString() + "\n";
+		String str = layers.size() + "\n";
+		for(Layer layer : layers){
+			str += layer.toString() + "\n";
 		}
 		return str;
 	}

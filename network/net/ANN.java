@@ -1,26 +1,29 @@
 package neuralnet.network.net;
 
-import neuralnet.algebra.NetworkOrganizer;
 import neuralnet.network.layer.FullyConnected;
-import neuralnet.network.layer.Layer;
 
 /**
- * A FC network
+ * An artificial neural network
  * @author Muti Kara
  * */
 public class ANN extends Network {
-	int[] structure = NetworkOrganizer.structure;
-	int length = structure.length;
-	
+	int previous = 0;
+
 	/**
-	 * Creates an artificial neural network
-	 * */
-	public ANN() {
-		layers = new Layer[length];
-		for(int i = 1; i < length - 1; i++){
-			layers[i] = new FullyConnected(structure[i-1], structure[i], FullyConnected.RELU_ACTIVATION);
+	* adds a new layer
+	* @param size of new layer
+	* @param activation type
+	* @return this network
+	*/
+	@Override
+	public Network addLayer(int ... layerDescription) {
+		if(layerDescription.length != 2) {
+			System.out.println("Wrong parameter format");
+			return null;
 		}
-		layers[length - 1] = new FullyConnected(structure[length - 2], structure[length - 1], FullyConnected.SOFTMAX_ACTIVATION);
+		layers.add(new FullyConnected(previous, layerDescription[0], layerDescription[1]));
+		previous = layerDescription[0];
+		return this;
 	}
 	
 }

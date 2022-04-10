@@ -1,13 +1,13 @@
 package neuralnet.training;
 
-import neuralnet.network.cnn.*;
-import neuralnet.network.cnn.layer.Convolutional;
-import neuralnet.network.ann.*;
-import neuralnet.network.*;
-import neuralnet.preproccess.images.*;
-
-import neuralnet.algebra.*;
-import neuralnet.algebra.matrix.*;
+import neuralnet.NetworkOrganizer;
+import neuralnet.matrix.Matrix;
+import neuralnet.network.Forwardable;
+import neuralnet.network.NeuralNetwork;
+import neuralnet.network.layer.Convolutional;
+import neuralnet.network.net.ANN;
+import neuralnet.network.net.CNN;
+import neuralnet.network.net.Network;
 
 /**
 * CNNTrainer
@@ -46,14 +46,14 @@ public class CNNTrainer {
 	public void generateCandidate(int k) {
 		candidate = new CNN();
 		for(int i = 0; i < NetworkOrganizer.convolutional.length; i++){
-			Convolutional newLayer = bestConvNet.getConvLayer(i).createClone();
+			Convolutional newLayer = ((Convolutional) (bestConvNet.getLayer(2*i))).createClone();
 			if(k % NetworkOrganizer.convolutional.length == i)
 				for(int j = 0; j < NetworkOrganizer.convolutional[i]; j++)
 					if(k % NetworkOrganizer.convolutional[i] == j){
-						newLayer.setKernel(j, MatrixTools.generate(bestConvNet.getConvLayer(i).getKernel(j), k % NetworkOrganizer.kernel[i], NetworkOrganizer.cnnLearningRate));;
+						newLayer.setParameter(j, (((Convolutional) (bestConvNet.getLayer(2*i))).getParameter(j)).generate(k % NetworkOrganizer.kernel[i], NetworkOrganizer.cnnLearningRate));
 						System.out.println(i + ", " + j + ", " + k % NetworkOrganizer.kernel[i]);
 					}
-			candidate.setConvLayer(i, newLayer);
+			candidate.setLayers(2 * i, newLayer);
 		}
 	}
 	
@@ -67,7 +67,7 @@ public class CNNTrainer {
 	}
 	
 	public double calculateKernelErrors(CNN convNet, ANN neuralNet) {
-		NeuralNetwork network = new NeuralNetwork(convNet, neuralNet);
+		NeuralNetwork network = new NeuralNetwork().addNet(convNet).addNet(neuralNet);;
 		double kernelFailures = 0;
 		for(int i = 0; i < NetworkOrganizer.dataSize; i++){
 			String str = network.classify( images.getInput(i) );
