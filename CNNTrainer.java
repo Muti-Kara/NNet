@@ -1,6 +1,5 @@
 package neuralnet.training;
 
-import neuralnet.NetworkOrganizer;
 import neuralnet.matrix.Matrix;
 import neuralnet.network.Forwardable;
 import neuralnet.network.NeuralNetwork;
@@ -50,7 +49,7 @@ public class CNNTrainer {
 			if(k % NetworkOrganizer.convolutional.length == i)
 				for(int j = 0; j < NetworkOrganizer.convolutional[i]; j++)
 					if(k % NetworkOrganizer.convolutional[i] == j){
-						newLayer.setParameter(j, (((Convolutional) (bestConvNet.getLayer(2*i))).getParameter(j)).generate(k % NetworkOrganizer.kernel[i], NetworkOrganizer.cnnLearningRate));
+						newLayer.setParameter(j, (((Convolutional) (bestConvNet.getLayer(2*i))).getParameter(j)).mutate(k % NetworkOrganizer.kernel[i], NetworkOrganizer.cnnLearningRate));
 						System.out.println(i + ", " + j + ", " + k % NetworkOrganizer.kernel[i]);
 					}
 			candidate.setLayers(2 * i, newLayer);

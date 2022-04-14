@@ -3,27 +3,16 @@ package neuralnet.network.layer;
 import neuralnet.matrix.Matrix;
 
 /**
-* Pooling Layer
 * @author Muti Kara
 */
 public class Pooling extends Layer {
 	int size;
 	
-	/**
-	* Constructor takes only one parameter. 
-	* @param size
-	 */
 	public Pooling(int size){
 		this.size = size;
-		bias = new Matrix(0, 0);
 		parameters = new Matrix[0];
 	}
 	
-	/**
-	* Applies max pooling.
-	* @param input
-	* @return pooled output for next layer
-	 */
 	public Matrix[] forwardPropagation(Matrix[] input) {
 		Matrix[] ans = new Matrix[input.length];
 		for(int i = 0; i < input.length; i++){
@@ -42,5 +31,10 @@ public class Pooling extends Layer {
 		}
 		
 		return ans;
+	}
+
+	@Override
+	public void applyChanges(double... learningParameters) {
+		// TODO Auto-generated method stub
 	}
 }

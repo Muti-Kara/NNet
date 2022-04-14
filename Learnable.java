@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.util.Scanner;
 
 /**
-* Readable
+* Learnable
 */
 public interface Learnable {
 	public void read(Scanner in);

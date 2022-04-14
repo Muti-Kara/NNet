@@ -6,23 +6,21 @@ import java.util.Scanner;
 
 import neuralnet.matrix.Matrix;
 import neuralnet.network.Forwardable;
+import neuralnet.network.Trainer;
 import neuralnet.network.layer.Layer;
 
 /**
-* Network
+* @author Muti Kara
 */
 public abstract class Network implements Forwardable<Matrix> {
-	ArrayList<Layer> layers = new ArrayList<>();
+	protected ArrayList< Layer > layers = new ArrayList<>();
 
 	@Override
 	public Matrix forwardPropagation(Matrix inputs) {
-		Matrix[] preOutput = new Matrix[1];
-		preOutput[0] = inputs.createClone();
-		
+		Matrix[] preOutput = new Matrix[] { inputs.createClone() };
 		for(Layer layer : layers) {
 			preOutput = layer.forwardPropagation(preOutput);
 		}
-		
 		return Matrix.flatten(preOutput);
 	}
 	
@@ -36,7 +34,7 @@ public abstract class Network implements Forwardable<Matrix> {
 	@Override
 	public void write(FileWriter out) {
 		for(Layer layer : layers){
-			layer.write(out);;
+			layer.write(out);
 		}
 	}
 	
@@ -52,6 +50,24 @@ public abstract class Network implements Forwardable<Matrix> {
 	
 	public void setLayers(int index, Layer layer) {
 		layers.set(index, layer);
+	}
+	
+	public void train(Trainer trainer, int epoch, int stochastic, double ... trainment) {
+		while (epoch-->0) {
+			trainer.shuffleData();
+			for (int i = 0; i < stochastic; i++) {
+				trainingEpochStep(trainer.dataInput(i), trainer.dataAnswer(i));
+			}
+			this.applyChanges(trainment);
+		}
+	}
+	
+	public abstract void trainingEpochStep(Matrix input, Matrix answer);
+	
+	public void applyChanges(double ... trainment) {
+		for (Layer layer : layers) {
+			layer.applyChanges(trainment);
+		}
 	}
 	
 	@Override
