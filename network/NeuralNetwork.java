@@ -5,16 +5,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import neuralnet.matrix.Matrix;
-import neuralnet.network.net.Network;
+import neuralnet.network.layer.Layer;
 
 /**
 * @author Muti Kara
 */
-public class NeuralNetwork implements Forwardable<Matrix> {
-	ArrayList<Network> nets = new ArrayList<>();
+public class NeuralNetwork implements Forwardable {
+	ArrayList< Layer > layers = new ArrayList<>();
+	double init;
+	
+	public NeuralNetwork(double init) {
+		this.init = init;
+	}
 	
 	public String classify(Matrix input) {
-		Matrix ans = forwardPropagation(input);
+		Matrix ans = (Matrix) forwardPropagation(input);
 		int max = 0;
 		for(int r = 0; r < ans.getRow(); r++)
 			if(ans.get(r, 0) > ans.get(max, 0))
@@ -23,48 +28,65 @@ public class NeuralNetwork implements Forwardable<Matrix> {
 	}
 	
 	@Override
-	public Matrix forwardPropagation(Matrix inputs) {
-		Matrix output = inputs.createClone();
-		for(Network net : nets) {
-			output = net.forwardPropagation(output);
+	public Object forwardPropagation(Object inputs) {
+		Object output = ((Matrix) inputs).createClone();
+		for(Layer layer : layers) {
+			output = layer.forwardPropagation(output);
 		}
 	 	return output;
 	}
 	
 	@Override
+	public Object backPropagation(Object errors) {
+		Object output = ((Matrix) errors).createClone();
+		for(int i = layers.size() - 1; i >= 0; i--) {
+			output = layers.get(i).backPropagation(output);
+		}
+	 	return (Matrix) output;
+	}
+	
+	public void train(Trainer trainer, int epoch, int stochastic, double rate, double momentum) {
+		while(epoch-->0) {
+			trainer.shuffleData();
+			for (int i = 0; i < stochastic; i++) {
+				Matrix predictions = (Matrix) forwardPropagation(trainer.dataInput(i));
+				backPropagation(predictions.sub(trainer.dataAnswer(i)));
+				for(Layer layer : layers) {
+					layer.calculateChanges();
+				}
+			}
+			for (Layer layer : layers) {
+				layer.applyChanges(rate, momentum);
+			}
+		}
+	}
+	
+	@Override
 	public String toString() {
 		String str = "";
-		for(Network net : nets) {
-			str += net.toString();
+		for(Layer layer : layers) {
+			str += layer.toString();
 		}
 		return str;
 	}
 
 	@Override
 	public void read(Scanner in) {
-		for(Network net : nets) {
-			net.read(in);;
+		for(Layer layer : layers) {
+			layer.read(in);;
 		}
 	}
 
 	@Override
 	public void write(FileWriter out) {
-		for(Network net : nets) {
-			net.write(out);
+		for(Layer layer : layers) {
+			layer.write(out);
 		}
 	}
 
-	public NeuralNetwork addNet(Network newNet) {
-		nets.add(newNet);
+	public NeuralNetwork addLayer(Layer newlayer) {
+		layers.add(newlayer.randomize(init));
 		return this;
-	}
-	
-	public Network getNetwork(int index) {
-		return nets.get(index);
-	}
-	
-	public void setNetwork(int index, Network net) {
-		nets.set(index, net);
 	}
 
 }

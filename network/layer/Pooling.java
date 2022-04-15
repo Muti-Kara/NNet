@@ -13,7 +13,13 @@ public class Pooling extends Layer {
 		parameters = new Matrix[0];
 	}
 	
-	public Matrix[] forwardPropagation(Matrix[] input) {
+	public Matrix[] forwardPropagation(Object inputs) {
+		Matrix[] input;
+		if (inputs instanceof Matrix[])
+			input = ((Matrix[]) inputs);
+		else
+			return null;
+		
 		Matrix[] ans = new Matrix[input.length];
 		for(int i = 0; i < input.length; i++){
 			ans[i] = new Matrix(input[i].getRow() / size + 1, input[i].getCol() / size + 1);
@@ -34,7 +40,21 @@ public class Pooling extends Layer {
 	}
 
 	@Override
-	public void applyChanges(double... learningParameters) {
-		// TODO Auto-generated method stub
+	public Matrix[] backPropagation(Object errors) {
+		Matrix[] error;
+		if (errors instanceof Matrix[])
+			error = (Matrix[]) errors;
+		else
+			return null;
+		
+		return null;
+	}
+
+	@Override
+	public void calculateChanges() {}
+	
+	@Override
+	public String toString() {
+		return size + "\n";
 	}
 }

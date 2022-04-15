@@ -9,14 +9,33 @@ import neuralnet.network.Forwardable;
 /**
 * @author Muti Kara
 */
-public abstract class Layer implements Forwardable<Matrix[]> {
-	protected Matrix[] parameters;
+public abstract class Layer implements Forwardable {
+	public final static int TRAINMENT = -1;
+	public final static int PRETRAINED = -2;
+	
+	protected Matrix[] parameters, deltaPara, prevDelta;
+	boolean training;
 	
 	public Layer randomize(double d) {
+		if (parameters == null)
+			return this;
+		
 		for(int i = 0; i < parameters.length; i++)
 			parameters[i].randomize(d).abs();
+		
 		return this;
 	}
+	
+	public void applyChanges(double rate, double momentum) {
+		for (int i = 0; i < parameters.length; i++) {
+			parameters[i].sub(deltaPara[i].scalarProd(rate));
+			parameters[i].sub(prevDelta[i].scalarProd(momentum));
+			prevDelta[i] = deltaPara[i].createClone();
+			deltaPara[i].scalarProd(0);
+		}
+	}
+	
+	public abstract void calculateChanges();
 	
 	@Override
 	public void read(Scanner in) {
@@ -39,14 +58,4 @@ public abstract class Layer implements Forwardable<Matrix[]> {
 		return str;
 	}
 	
-	public abstract void applyChanges(double ... learningParameters);
-	
-	public Matrix getParameter(int index) {
-		return parameters[index];
-	}
-
-	public void setParameter(int index, Matrix parameter) {
-		parameters[index] = parameter;
-	}
-
 }

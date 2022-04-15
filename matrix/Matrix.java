@@ -14,6 +14,7 @@ public class Matrix implements Learnable {
 	Random rand = new Random();
 	double[][] matrix;
 	int col, row;
+	boolean padded = false;
 	
 	public static Matrix flatten(Matrix[] matArray){
 		if (matArray.length == 1)
@@ -44,10 +45,14 @@ public class Matrix implements Learnable {
 	}
 	
 	public void set(int row, int col, double value){
+		if(padded && (row < 0 || row >= this.row || col < 0 || col >= this.col))
+			return;
 		matrix[row][col] = value;
 	}
 	
 	public double get(int row, int col){
+		if(padded && (row < 0 || row >= this.row || col < 0 || col >= this.col))
+			return 0;
 		return matrix[row][col];
 	}
 	
@@ -193,12 +198,38 @@ public class Matrix implements Learnable {
 		return this;
 	}
 	
-	public Matrix mutate(int r, double rate) {
-		Matrix child = new Matrix(row, col);
-		for(int c = 0; c < child.getCol(); c++){
-			child.set(r, c, matrix[r][c] + rand.nextGaussian() * rate);
+	public Matrix convolve(Matrix kernel, int padding) {
+		if(kernel.getRow() % 2 == 0) {
+			System.out.println("Use an odd sized kernel");
+			return null;
 		}
-		return child;
+		
+		padded = true;
+		Matrix result = new Matrix(this.row, this.col);
+		
+		for (int r = 0; r < row; r++) {
+			for (int c = 0; c < col; c++) {
+				for(int rk = -padding; rk <= padding; rk++) {
+					for(int ck = -padding; ck <= padding; ck++) {
+						result.matrix[r][c] += matrix[r + rk][c + ck] * kernel.matrix[rk + padding][ck + padding];
+					}
+				}
+			}
+		}
+		
+		padded = false;
+		
+		return result;
+	}
+	
+	public double totalSum() {
+		double sum = 0;
+		for (int r = 0; r < row; r++) {
+			for (int c = 0; c < col; c++) {
+				sum += matrix[r][c];
+			}
+		}
+		return sum;
 	}
 	
 	@Override
@@ -206,7 +237,7 @@ public class Matrix implements Learnable {
 		String str = "";
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++)
-				str += matrix[r][c] + " ";
+				str += String.format("%.12f ", matrix[r][c]);
 			str += "\n";
 		}
 		return str;
