@@ -1,10 +1,10 @@
-package neuralnet.training;
+package neuralnet.network.train;
 
 import java.util.Random;
 
 import neuralnet.algebra.NetworkOrganizer;
 import neuralnet.algebra.matrix.Matrix;
-import neuralnet.network.cnn.CNN;
+import neuralnet.network.net.CNN;
 import neuralnet.preproccess.images.ImageOrganizer;
 
 /**

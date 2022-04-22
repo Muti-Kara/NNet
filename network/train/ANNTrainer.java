@@ -1,9 +1,9 @@
-package neuralnet.training;
+package neuralnet.network.train;
 
 import neuralnet.algebra.NetworkOrganizer;
 import neuralnet.algebra.matrix.Matrix;
-import neuralnet.network.ann.ANN;
-import neuralnet.network.ann.layer.FullyConnected;
+import neuralnet.network.layer.FullyConnected;
+import neuralnet.network.net.ANN;
 
 /**
 * NetworkTrainer

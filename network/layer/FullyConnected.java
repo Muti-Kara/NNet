@@ -1,4 +1,4 @@
-package neuralnet.network.ann.layer;
+package neuralnet.network.layer;
 
 import neuralnet.algebra.matrix.*;
 

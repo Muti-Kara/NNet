@@ -1,8 +1,8 @@
 package neuralnet.network;
 
 import neuralnet.algebra.matrix.Matrix;
-import neuralnet.network.ann.ANN;
-import neuralnet.network.cnn.CNN;
+import neuralnet.network.net.ANN;
+import neuralnet.network.net.CNN;
 
 /**
 * A feed forward network.

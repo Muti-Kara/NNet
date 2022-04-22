@@ -1,6 +1,7 @@
-package neuralnet.network.cnn;
+package neuralnet.network.net;
 
-import neuralnet.network.cnn.layer.*;
+import neuralnet.network.layer.Convolutional;
+import neuralnet.network.layer.Pooling;
 import neuralnet.algebra.NetworkOrganizer;
 import neuralnet.algebra.matrix.*;
 

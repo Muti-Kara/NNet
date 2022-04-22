@@ -1,6 +1,6 @@
-package neuralnet.network.ann;
+package neuralnet.network.net;
 
-import neuralnet.network.ann.layer.FullyConnected;
+import neuralnet.network.layer.FullyConnected;
 import neuralnet.algebra.NetworkOrganizer;
 import neuralnet.algebra.matrix.Matrix;
 

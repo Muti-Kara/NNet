@@ -1,9 +1,9 @@
-package neuralnet.training;
+package neuralnet.network.train;
 
-import neuralnet.network.cnn.*;
-import neuralnet.network.cnn.layer.Convolutional;
-import neuralnet.network.ann.*;
 import neuralnet.network.*;
+import neuralnet.network.net.ANN;
+import neuralnet.network.net.CNN;
+import neuralnet.network.layer.Convolutional;
 import neuralnet.preproccess.images.*;
 
 import neuralnet.algebra.*;
