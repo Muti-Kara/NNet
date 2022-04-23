@@ -1,4 +1,4 @@
-package neuralnet.preproccess.images;
+package neuralnet.network.train;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,11 +8,10 @@ import neuralnet.algebra.NetworkOrganizer;
 import neuralnet.algebra.matrix.Matrix;
 
 /**
-* InputImage
-* This class reads a folder and gets the input and answer.
-* @author Muti Kara
+* ImageOrganizer
 */
 public class ImageOrganizer {
+	
 	char start, end;
 	int numOfData;
 	String folderName = NetworkOrganizer.readDir + "/images/data/";

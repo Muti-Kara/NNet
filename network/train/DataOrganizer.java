@@ -5,7 +5,6 @@ import java.util.Random;
 import neuralnet.algebra.NetworkOrganizer;
 import neuralnet.algebra.matrix.Matrix;
 import neuralnet.network.net.CNN;
-import neuralnet.preproccess.images.ImageOrganizer;
 
 /**
 * Data organizer for ann

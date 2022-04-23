@@ -1,62 +1,22 @@
 package neuralnet.network.net;
 
 import neuralnet.network.layer.FullyConnected;
-import neuralnet.algebra.NetworkOrganizer;
-import neuralnet.algebra.matrix.Matrix;
 
 /**
  * A FC network
  * @author Muti Kara
  * */
-public class ANN {
-	int[] structure = NetworkOrganizer.structure;
-	FullyConnected[] layers = new FullyConnected[structure.length];
+public class ANN extends Net{
 	
 	/**
 	 * Creates an artificial neural network
 	 * */
 	public ANN() {
-		for(int i = 1; i < structure.length; i++){
-			layers[i] = new FullyConnected(structure[i-1], structure[i]);
+		layers.add(new FullyConnected(0, 0, -1));
+		for(int i = 1; i < structure.size(); i++){
+			int activation = (i == structure.size() - 1)? FullyConnected.SOFTMAX : FullyConnected.RELU;
+			layers.add(new FullyConnected(structure.get(i-1), structure.get(i), activation));
 		}
 	}
 	
-	/**
-	* 
-	* @param input
-	* @return output probabilities for categories
-	 */
-	public Matrix forwardPropagation(Matrix input) {
-		Matrix output = input.createClone();
-		for(int layer = 1; layer < structure.length; layer++) {
-			output = layers[layer].forwardPropagation(output, layer == structure.length - 1);
-		}
-		return output;
-	}
-	
-	/**
-	* 
-	* @param index
-	* @return index th layer of network
-	 */
-	public FullyConnected getLayer(int index){
-		return layers[index];
-	}
-	
-	/**
-	* Sets index th layer with given FC layer
-	* @param index
-	 */
-	public void setLayer(int index, FullyConnected layer){
-		layers[index] = layer;
-	}
-	
-	@Override
-	public String toString() {
-		String str = "";
-		for(int i = 1; i < layers.length; i++){
-			str += "\n" + layers[i].toString();
-		}
-		return str;
-	}
 }

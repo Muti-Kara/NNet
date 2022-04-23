@@ -4,7 +4,6 @@ import neuralnet.network.*;
 import neuralnet.network.net.ANN;
 import neuralnet.network.net.CNN;
 import neuralnet.network.layer.Convolutional;
-import neuralnet.preproccess.images.*;
 
 import neuralnet.algebra.*;
 import neuralnet.algebra.matrix.*;
@@ -50,7 +49,7 @@ public class CNNTrainer {
 			if(k % NetworkOrganizer.convolutional.length == i)
 				for(int j = 0; j < NetworkOrganizer.convolutional[i]; j++)
 					if(k % NetworkOrganizer.convolutional[i] == j){
-						newLayer.setKernel(j, MatrixTools.generate(bestConvNet.getConvLayer(i).getKernel(j), k % NetworkOrganizer.kernel[i], NetworkOrganizer.cnnLearningRate));;
+						newLayer.setParameters(j, bestConvNet.getConvLayer(i).getParameters(j).generate(k % NetworkOrganizer.kernel[i], NetworkOrganizer.cnnLearningRate));;
 						System.out.println(i + ", " + j + ", " + k % NetworkOrganizer.kernel[i]);
 					}
 			candidate.setConvLayer(i, newLayer);

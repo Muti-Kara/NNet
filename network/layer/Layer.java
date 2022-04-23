@@ -10,15 +10,20 @@ import neuralnet.network.Forwardable;
 * Layer
 */
 public abstract class Layer implements Forwardable<Matrix[]>{
+	Matrix[] parameters;
 
-	@Override
-	public Matrix[] forwardPropagation(Matrix[] inputs) {
-		// TODO Auto-generated method stub
-		return null;
+	public void randomize(double rate) {
+		for (int i = 0; i < parameters.length; i++) {
+			parameters[i].randomize(rate).abs();
+		}
 	}
 	
-	public void randomize() {
-		// TODO implement
+	public Matrix getParameters(int index) {
+		return parameters[index];
+	}
+	
+	public void setParameters(int index, Matrix parameter) {
+		this.parameters[index] = parameter;
 	}
 
 	@Override

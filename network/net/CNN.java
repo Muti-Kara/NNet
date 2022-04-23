@@ -40,23 +40,15 @@ public class CNN {
 			preOutput = poolLayers[i].forwardPropagation(preOutput);
 		}
 		
-		return MatrixTools.flatten(preOutput);
+		return Matrix.flatten(preOutput);
 	}
 	
 	public Convolutional getConvLayer(int index) {
 		return convLayers[index];
 	}
 	
-	public Pooling getPoolLayer(int index) {
-		return poolLayers[index];
-	}
-	
 	public void setConvLayer(int index, Convolutional layer) {
 		convLayers[index] = layer;
-	}
-	
-	public void setPoolLayer(int index, Pooling layer) {
-		poolLayers[index] = layer;
 	}
 	
 	@Override

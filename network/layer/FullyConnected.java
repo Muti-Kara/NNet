@@ -1,32 +1,27 @@
 package neuralnet.network.layer;
 
-import neuralnet.algebra.matrix.*;
+import neuralnet.algebra.matrix.Matrix;
 
 /**
 * Fully Connected Layer
 * @author Muti Kara
 */
-public class FullyConnected {
-	Matrix weight, bias;
+public class FullyConnected extends Layer {
+	public final static int RELU = 0;
+	public final static int SOFTMAX = 1;
+	
+	int activation;
 	
 	/**
 	* Constructor takes two parameters:
 	* @param previous layers size
 	* @param next layers size
 	 */
-	public FullyConnected(int sizePrev, int sizeNext){
-		weight = new Matrix(sizeNext, sizePrev);
-		bias = new Matrix(sizeNext, 1);
-	}
-	
-	/**
-	* 
-	* @return randomizes weights and biases
-	*/
-	public FullyConnected randomize(double rate) {
-		weight.randomize(rate).abs();
-		bias.randomize(rate).abs();
-		return this;
+	public FullyConnected(int sizePrev, int sizeNext, int activation){
+		this.activation = activation;
+		parameters = new Matrix[2];
+		parameters[0] = new Matrix(sizeNext, sizePrev);
+		parameters[1] = new Matrix(sizeNext, 1);
 	}
 	
 	/**
@@ -35,47 +30,24 @@ public class FullyConnected {
 	* @param softmax
 	* @return if softmax is true applies softmax activation otherwise applies ELU activation.
 	 */
-	public Matrix forwardPropagation(Matrix input, boolean softmax){
-		if(softmax)
-			return MatrixTools.softmax(weight.dot(input).sum(bias));
-		return MatrixTools.relu(weight.dot(input).sum(bias));
-	}
-	
-	/**
-	* 
-	* @return weight
-	 */
-	public Matrix getWeight() {
-		return weight;
-	}
-
-	/**
-	* 
-	* @return bias
-	 */
-	public Matrix getBias() {
-		return bias;
-	}
-
-	/**
-	* 
-	* @param weight
-	 */
-	public void setWeight(Matrix weight) {
-		this.weight = weight;
-	}
-
-	/**
-	* 
-	* @param bias
-	 */
-	public void setBias(Matrix bias) {
-		this.bias = bias;
+	@Override
+	public Matrix[] forwardPropagation(Matrix[] input){
+		switch (activation) {
+			case RELU:
+				return new Matrix[]{ parameters[0].dot(input[0]).sum(parameters[1]).relu() };
+			case SOFTMAX:
+				return new Matrix[]{ parameters[0].dot(input[0]).sum(parameters[1]).softmax() };
+			default:
+				return null;
+		}
 	}
 
 	@Override
 	public String toString() {
-		return "\n" + weight.getCol() + " " + weight.getRow() + "\n" + weight + "\n" + bias;
+		return "\n"
+		+ parameters[0].getCol() + " " + parameters[0].getRow()
+		+ "\n" + parameters[0]
+		+ "\n" + parameters[1];
 	}
 
 }

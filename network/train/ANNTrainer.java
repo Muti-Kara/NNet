@@ -17,7 +17,7 @@ public class ANNTrainer {
 	Matrix[] activation = new Matrix[length];
 	Matrix[] errors = new Matrix[length];
 	FullyConnected[] changes = new FullyConnected[length];
-	FullyConnected[] previousChanges = new FullyConnected[length];
+	FullyConnected[] prevChg = new FullyConnected[length];
 	
 	ANN net;
 	DataOrganizer organizer;
@@ -29,8 +29,10 @@ public class ANNTrainer {
 	public ANNTrainer(ANN net){
 		this.net = net;
 		for(int i = 1; i < length; i++){
-			changes[i] = new FullyConnected(net.getLayer(i).getWeight().getCol(), net.getLayer(i).getWeight().getRow()).randomize(NetworkOrganizer.annLearningRate);
-			previousChanges[i] = new FullyConnected(net.getLayer(i).getWeight().getCol(), net.getLayer(i).getWeight().getRow());
+			int action = (i == length - 1)? FullyConnected.SOFTMAX : FullyConnected.RELU;
+			changes[i] = new FullyConnected(net.getLayer(i).getParameters(0).getCol(), net.getLayer(i).getParameters(0).getRow(), action);
+			prevChg[i] = new FullyConnected(net.getLayer(i).getParameters(0).getCol(), net.getLayer(i).getParameters(0).getRow(), action);
+			changes[i].randomize(NetworkOrganizer.annLearningRate);
 		}
 	}
 	
@@ -66,7 +68,7 @@ public class ANNTrainer {
 	public void forwardPropagate(int datum) {
 		activation[0] = organizer.getInput(datum);
 		for(int i = 1; i < length; i++){
-			activation[i] = net.getLayer(i).forwardPropagation(activation[i-1], i == length - 1);
+			activation[i] = net.getLayer(i).forwardPropagation(new Matrix[]{ activation[i-1] })[0];
 		}
 	}
 	
@@ -90,7 +92,7 @@ public class ANNTrainer {
 	 * */
 	public void calculateLoss(){
 		for(int j = length - 2; j > 0; j--){
-			errors[j] = net.getLayer(j+1).getWeight().T().dot(errors[j+1]);
+			errors[j] = net.getLayer(j+1).getParameters(0).T().dot(errors[j+1]);
 		}
 	}
 	
@@ -99,12 +101,12 @@ public class ANNTrainer {
 	 * */
 	public void calculateChanges() {
 		for(int i = 1; i < length; i++) {
-			previousChanges[i].setWeight(changes[i].getWeight());
-			previousChanges[i].setBias(changes[i].getBias());
+			prevChg[i].setParameters(0, changes[i].getParameters(0));
+			prevChg[i].setParameters(1, changes[i].getParameters(1));
 		}
 		for(int j = 1; j < length; j++){
-			changes[j].getBias().sum(errors[j]);
-			changes[j].getWeight().sum(errors[j].dot(activation[j - 1].T()));
+			changes[j].getParameters(1).sum(errors[j]);
+			changes[j].getParameters(0).sum(errors[j].dot(activation[j - 1].T()));
 		}
 	}
 	
@@ -113,11 +115,11 @@ public class ANNTrainer {
 	 * */
 	public void applyChanges() {
 		for(int i = 1; i < length; i++){
-			net.getLayer(i).getWeight().sub(changes[i].getWeight().sProd(NetworkOrganizer.annLearningRate));
-			net.getLayer(i).getBias().sub(changes[i].getBias().sProd(NetworkOrganizer.annLearningRate));
+			net.getLayer(i).getParameters(0).sub(changes[i].getParameters(0).sProd(NetworkOrganizer.annLearningRate));
+			net.getLayer(i).getParameters(1).sub(changes[i].getParameters(1).sProd(NetworkOrganizer.annLearningRate));
 			
-			net.getLayer(i).getWeight().sub(previousChanges[i].getWeight().sProd(NetworkOrganizer.momentumFactor));
-			net.getLayer(i).getBias().sub(previousChanges[i].getBias().sProd(NetworkOrganizer.momentumFactor));
+			net.getLayer(i).getParameters(0).sub(prevChg[i].getParameters(0).sProd(NetworkOrganizer.momentumFactor));
+			net.getLayer(i).getParameters(1).sub(prevChg[i].getParameters(1).sProd(NetworkOrganizer.momentumFactor));
 		}
 	}
 }

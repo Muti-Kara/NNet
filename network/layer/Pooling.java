@@ -6,7 +6,7 @@ import neuralnet.algebra.matrix.Matrix;
 * Pooling Layer
 * @author Muti Kara
 */
-public class Pooling {
+public class Pooling extends Layer {
 	int size;
 	
 	/**

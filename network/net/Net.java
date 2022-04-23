@@ -17,12 +17,17 @@ public abstract class Net implements Forwardable<Matrix> {
 	
 	@Override
 	public Matrix forwardPropagation(Matrix inputs) {
-		// TODO Auto-generated method stub
-		return null;
+		Matrix[] output = new Matrix[]{ inputs };
+		for (int i = 0; i < layers.size(); i++) {
+			output = layers.get(i).forwardPropagation(output);
+		}
+		return output[0];
 	}
 	
-	public void randomize() {
-		// TODO implement
+	public void randomize(double rate) {
+		for (int i = 0; i < structure.size(); i++) {
+			layers.get(i).randomize(rate);
+		}
 	}
 	
 	public Layer getLayer(int index) {
@@ -45,8 +50,11 @@ public abstract class Net implements Forwardable<Matrix> {
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str = "";
+		for(int i = 1; i < layers.size(); i++){
+			str += "\n" + layers.get(i).toString();
+		}
+		return str;
 	}
 	
 }
