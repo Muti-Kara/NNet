@@ -1,16 +1,22 @@
 package neuralnet.network;
 
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import neuralnet.algebra.matrix.Matrix;
-import neuralnet.network.net.ANN;
-import neuralnet.network.net.CNN;
+// import neuralnet.network.net.ANN;
+// import neuralnet.network.net.CNN;
+import neuralnet.network.net.Net;
 
 /**
 * A feed forward network.
 * @author Muti Kara
 */
-public class NeuralNetwork {
-	CNN cnn;
-	ANN ann;
+public class NeuralNetwork implements Forwardable<Matrix> {
+	ArrayList<Net> nets = new ArrayList<>();
+	// CNN cnn;
+	// ANN ann;
 	
 	/**
 	* Takes two arguments: 1 CNN and 1 ANN
@@ -48,6 +54,18 @@ public class NeuralNetwork {
 	@Override
 	public String toString() {
 		return cnn.toString() + "\n" + ann.toString();
+	}
+
+	@Override
+	public void read(Scanner in) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void write(FileWriter out) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
