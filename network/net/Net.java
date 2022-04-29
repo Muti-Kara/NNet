@@ -12,7 +12,6 @@ import neuralnet.network.layer.Layer;
 * Net
 */
 public abstract class Net implements Forwardable<Matrix> {
-	ArrayList<Integer> structure = new ArrayList<>();
 	ArrayList<Layer> layers = new ArrayList<>();
 	
 	@Override
@@ -21,11 +20,11 @@ public abstract class Net implements Forwardable<Matrix> {
 		for (int i = 0; i < layers.size(); i++) {
 			output = layers.get(i).forwardPropagation(output);
 		}
-		return output[0];
+		return Matrix.flatten(output);
 	}
 	
 	public void randomize(double rate) {
-		for (int i = 0; i < structure.size(); i++) {
+		for (int i = 0; i < layers.size(); i++) {
 			layers.get(i).randomize(rate);
 		}
 	}
@@ -37,6 +36,8 @@ public abstract class Net implements Forwardable<Matrix> {
 	public void setLayers(int index, Layer layer) {
 		layers.set(index, layer);
 	}
+	
+	public abstract void addLayer(int type, int ... layerDescriptor);
 	
 	@Override
 	public void read(Scanner in) {

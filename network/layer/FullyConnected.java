@@ -10,18 +10,17 @@ public class FullyConnected extends Layer {
 	public final static int RELU = 0;
 	public final static int SOFTMAX = 1;
 	
-	int activation;
-	
 	/**
-	* Constructor takes two parameters:
+	* Constructor takes three parameters:
 	* @param previous layers size
 	* @param next layers size
+	* @param activation type
 	 */
-	public FullyConnected(int sizePrev, int sizeNext, int activation){
-		this.activation = activation;
+	public FullyConnected(int ... layerDescriptor){
+		super(layerDescriptor);
 		parameters = new Matrix[2];
-		parameters[0] = new Matrix(sizeNext, sizePrev);
-		parameters[1] = new Matrix(sizeNext, 1);
+		parameters[0] = new Matrix(information[1], information[0]);
+		parameters[1] = new Matrix(information[1], 1);
 	}
 	
 	/**
@@ -32,7 +31,7 @@ public class FullyConnected extends Layer {
 	 */
 	@Override
 	public Matrix[] forwardPropagation(Matrix[] input){
-		switch (activation) {
+		switch (information[2]) {
 			case RELU:
 				return new Matrix[]{ parameters[0].dot(input[0]).sum(parameters[1]).relu() };
 			case SOFTMAX:
@@ -43,11 +42,12 @@ public class FullyConnected extends Layer {
 	}
 
 	@Override
-	public String toString() {
-		return "\n"
-		+ parameters[0].getCol() + " " + parameters[0].getRow()
-		+ "\n" + parameters[0]
-		+ "\n" + parameters[1];
+	public FullyConnected createClone() {
+		FullyConnected fullyConnected = new FullyConnected(information);
+		for(int i = 0; i < parameters.length; i++){
+			fullyConnected.setParameters(i, parameters[i].createClone());
+		}
+		return fullyConnected;
 	}
 
 }

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import neuralnet.algebra.matrix.Matrix;
-// import neuralnet.network.net.ANN;
-// import neuralnet.network.net.CNN;
 import neuralnet.network.net.Net;
 
 /**
@@ -15,17 +13,9 @@ import neuralnet.network.net.Net;
 */
 public class NeuralNetwork implements Forwardable<Matrix> {
 	ArrayList<Net> nets = new ArrayList<>();
-	// CNN cnn;
-	// ANN ann;
 	
-	/**
-	* Takes two arguments: 1 CNN and 1 ANN
-	* @param cnn
-	* @param ann
-	 */
-	public NeuralNetwork(CNN cnn, ANN ann){
-		this.cnn = cnn;
-		this.ann = ann;
+	public void addNet(Net net) {
+		nets.add(net);
 	}
 	
 	/**
@@ -34,7 +24,10 @@ public class NeuralNetwork implements Forwardable<Matrix> {
 	* @return Resulting matrix after forward propagating cnn and ann
 	 */
 	public Matrix forwardPropagation(Matrix input){
-		return ann.forwardPropagation( cnn.forwardPropagation(input) );
+		for (int i = 0; i < nets.size(); i++) {
+			input = nets.get(i).forwardPropagation(input);
+		}
+		return input;
 	}
 	
 	/**
@@ -53,7 +46,11 @@ public class NeuralNetwork implements Forwardable<Matrix> {
 	
 	@Override
 	public String toString() {
-		return cnn.toString() + "\n" + ann.toString();
+		String str = "";
+		for (int i = 0; i < nets.size(); i++) {
+			str += nets.get(i).toString();
+		}
+		return str;
 	}
 
 	@Override

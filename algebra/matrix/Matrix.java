@@ -1,12 +1,16 @@
 package neuralnet.algebra.matrix;
 
+import java.io.FileWriter;
 import java.util.Random;
+import java.util.Scanner;
+
+import neuralnet.Learnable;
 
 /**
  * Matrix class for neural network
  * @author Muti Kara
  * */
-public class Matrix {
+public class Matrix implements Learnable {
 	Random rand = new Random();
 	double[][] matrix;
 	int col, row;
@@ -17,11 +21,13 @@ public class Matrix {
 	* @return flattened matrix array
 	 */
 	public static Matrix flatten(Matrix[] matArray){
-		Matrix vector = new Matrix(matArray.length * matArray[0].getRow() * matArray[0].getCol(), 1);
+		if (matArray.length == 1 && matArray[0].col == 1)
+			return matArray[0];
+		Matrix vector = new Matrix(matArray.length * matArray[0].row * matArray[0].col, 1);
 		int k = 0;
 		for(int i = 0; i < matArray.length; i++){
-			for(int r = 0; r < matArray[i].getRow(); r++){
-				for(int c = 0; c < matArray[i].getCol(); c++){
+			for(int r = 0; r < matArray[i].row; r++){
+				for(int c = 0; c < matArray[i].col; c++){
 					vector.set(k++, 0, matArray[i].get(r, c));
 				}
 			}
@@ -312,10 +318,24 @@ public class Matrix {
 	*/
 	public Matrix generate(int r, double rate) {
 		Matrix child = new Matrix(row, col);
-		for(int c = 0; c < child.getCol(); c++){
+		for(int c = 0; c < child.col; c++){
 			child.set(r, c, matrix[r][c] + rand.nextGaussian() * rate);
 		}
 		return child;
+	}
+	
+	public Matrix convolve(Matrix kernel) {
+		Matrix result = new Matrix(row - kernel.row + 1, col - kernel.col + 1);
+		for(int r = 0; r < result.row; r++){
+			for(int c = 0; c < result.col; c++){
+				for(int rk = 0; rk < kernel.row; rk++){
+					for(int ck = 0; ck < kernel.col; ck++){
+						result.matrix[r][c] += matrix[r + rk][c + ck] * kernel.matrix[rk][ck];
+					}
+				}
+			}
+		}
+		return result;
 	}
 	
 	@Override
@@ -327,6 +347,18 @@ public class Matrix {
 			str += "\n";
 		}
 		return str;
+	}
+
+	@Override
+	public void read(Scanner in) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void write(FileWriter out) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

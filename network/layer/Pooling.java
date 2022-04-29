@@ -7,14 +7,9 @@ import neuralnet.algebra.matrix.Matrix;
 * @author Muti Kara
 */
 public class Pooling extends Layer {
-	int size;
 	
-	/**
-	* Constructor takes only one parameter. 
-	* @param size
-	 */
-	public Pooling(int size){
-		this.size = size;
+	public Pooling(int ... layerDescriptor) {
+		super(layerDescriptor);
 	}
 	
 	/**
@@ -22,10 +17,11 @@ public class Pooling extends Layer {
 	* @param input
 	* @return pooled output for next layer
 	 */
+	@Override
 	public Matrix[] forwardPropagation(Matrix[] input) {
 		Matrix[] ans = new Matrix[input.length];
 		for(int i = 0; i < input.length; i++){
-			ans[i] = new Matrix(input[i].getRow() / size + 1, input[i].getCol() / size + 1);
+			ans[i] = new Matrix(input[i].getRow() / information[0] + 1, input[i].getCol() / information[0] + 1);
 			for(int r = 0; r < ans[i].getRow(); r++){
 				for(int c = 0; c < ans[i].getCol(); c++){
 					ans[i].set(r, c, -5e8);
@@ -34,16 +30,17 @@ public class Pooling extends Layer {
 			
 			for(int r = 0; r < input[i].getRow(); r++){
 				for(int c = 0; c < input[i].getCol(); c++){
-					ans[i].set(r/size, c/size, Math.max(input[i].get(r, c), ans[i].get(r/size, c/size)));
+					ans[i].set(r/information[0], c/information[0], Math.max(input[i].get(r, c), ans[i].get(r/information[0], c/information[0])));
 				}
 			}
 		}
 		
 		return ans;
 	}
-	
+
 	@Override
-	public String toString() {
-		return "\n" + size + "\n";
+	public Pooling createClone() {
+		return new Pooling(information);
 	}
+	
 }

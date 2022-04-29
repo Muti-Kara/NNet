@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import neuralnet.matrix.Matrix;
+import neuralnet.algebra.matrix.Matrix;
 
 /**
 * @author Muti Kara
