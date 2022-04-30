@@ -1,24 +1,32 @@
-package neuralnet.network;
+package neuralnet.network.train;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
-import neuralnet.algebra.matrix.Matrix;
+import neuralnet.algebra.Matrix;
+import neuralnet.network.net.Net;
 
 /**
 * @author Muti Kara
 */
-public class Trainer {
-	private List<Integer> validation = new ArrayList<>();
-	private List<Integer> data = new ArrayList<>();
-	private Matrix[] inputs, answers;
+public abstract class Trainer {
+	protected ArrayList<Integer> valid = new ArrayList<>();
+	protected ArrayList<Integer> data = new ArrayList<>();
+	protected Matrix[] inputs, answers;
 	
-	public Trainer(Matrix[] inputs, Matrix[] answers, double splitRatio) {
+	protected double error = 0;
+	protected Net net;
+	
+	protected int dataPtr = 0;
+	protected int valPtr = 0;
+	
+	
+	public Trainer(Net net, Matrix[] inputs, Matrix[] answers, double splitRatio) {
+		this.net = net;
 		this.inputs = inputs;
 		this.answers = answers;
 		
-		List<Integer> pointers = new ArrayList<>();
+		ArrayList<Integer> pointers = new ArrayList<>();
 		int i = 0;
 		for(; i < inputs.length; i++)
 			pointers.add(i);
@@ -30,26 +38,47 @@ public class Trainer {
 			data.add(pointers.get(i));
 		
 		for(; i < inputs.length; i++)
-			validation.add(pointers.get(i));
+			valid.add(pointers.get(i));
 	}
+	
+	public void train(int epoch, int stochastic, double rate, double momentum) {
+		for (int i = 0; i < epoch; i++) {
+			error = 0;
+			for (int j = 0; j < stochastic; j++) {
+				stochastic(i, j);
+			}
+			if(Double.isNaN(error))
+				return;
+			
+			apply(rate, momentum);
+		}
+	}
+	
+	public abstract void stochastic(int epoch, int stochastic);
+	public abstract void apply(double rate, double momentum);
+	public abstract void calculateError(Matrix answer);
 	
 	public void shuffleData() {
 		Collections.shuffle(data);
 	}
 	
-	public Matrix dataInput(int index) {
-		return inputs[data.get(index)];
+	public Matrix[] nextData() {
+		if (dataPtr == data.size()) {
+			dataPtr = 0;
+			shuffleData();
+		}
+		return new Matrix[]{ inputs[data.get(dataPtr++)], answers[data.get(dataPtr++)] };
 	}
 	
-	public Matrix validInput(int index) {
-		return inputs[validation.get(index)];
+	public Matrix[] nextValid() {
+		if (valPtr == valid.size()) {
+			valPtr = 0;
+		}
+		return new Matrix[]{ inputs[valid.get(valPtr++)], answers[valid.get(valPtr++)] };
 	}
 	
-	public Matrix dataAnswer(int index) {
-		return answers[data.get(index)];
+	public Net getBest() {
+		return net;
 	}
 	
-	public Matrix validAnswer(int index) {
-		return answers[validation.get(index)];
-	}
 }

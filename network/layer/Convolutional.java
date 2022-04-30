@@ -1,6 +1,6 @@
 package neuralnet.network.layer;
 
-import neuralnet.algebra.matrix.Matrix;
+import neuralnet.algebra.Matrix;
 
 /**
 * Convolutional Layer
@@ -10,8 +10,8 @@ public class Convolutional extends Layer {
 	
 	/**
 	* Constructor takes two parameters:
-	* @param number of parameters
-	* @param parameters size
+	* @param number of kernels
+	* @param kernels size
 	 */
 	public Convolutional(int ... layerDescriptor) {
 		super(layerDescriptor);

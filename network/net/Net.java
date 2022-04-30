@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import neuralnet.algebra.matrix.Matrix;
+import neuralnet.algebra.Matrix;
 import neuralnet.network.Forwardable;
 import neuralnet.network.layer.Layer;
 
@@ -27,6 +27,10 @@ public abstract class Net implements Forwardable<Matrix> {
 		for (int i = 0; i < layers.size(); i++) {
 			layers.get(i).randomize(rate);
 		}
+	}
+	
+	public int size() {
+		return layers.size();
 	}
 	
 	public Layer getLayer(int index) {

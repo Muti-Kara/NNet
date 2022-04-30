@@ -1,4 +1,4 @@
-package neuralnet.algebra.matrix;
+package neuralnet.algebra;
 
 import java.io.FileWriter;
 import java.util.Random;
@@ -33,6 +33,27 @@ public class Matrix implements Learnable {
 			}
 		}
 		return vector;
+	}
+	
+	/**
+	* Generates new generation from given two matrix.
+	* @param father
+	* @param mother
+	* @param generationSize
+	* @param mutation
+	* @return child generation as a Matrix array
+	*/
+	public static Matrix[] breed(Matrix father, Matrix mother, int generationSize, double mutation) {
+		Matrix[] gen = new Matrix[generationSize];
+		
+		for (int i = 0; i < generationSize; i++) {
+			Matrix fatCpy = father.createClone().sProd((double) i / (generationSize - 1));
+			Matrix motCpy = mother.createClone().sProd((double) (generationSize - i - 1) / (generationSize - 1));
+			gen[i] = new Matrix(father.row, father.col).randomize(mutation);
+			gen[i].sum(fatCpy).sum(motCpy);
+		}
+		
+		return gen;
 	}
 	
 	/**
@@ -309,21 +330,13 @@ public class Matrix implements Learnable {
 		return this;
 	}
 	
-	
 	/**
-	* Generates a new matrix by changing a row of parent matrix
-	* @param parent
-	* @param row
-	* @return child matrix
+	* convolves this matrix with given kernel<br />
+	* no padding<br />
+	* step size is 1
+	* @param kernel
+	* @return resulting matrix
 	*/
-	public Matrix generate(int r, double rate) {
-		Matrix child = new Matrix(row, col);
-		for(int c = 0; c < child.col; c++){
-			child.set(r, c, matrix[r][c] + rand.nextGaussian() * rate);
-		}
-		return child;
-	}
-	
 	public Matrix convolve(Matrix kernel) {
 		Matrix result = new Matrix(row - kernel.row + 1, col - kernel.col + 1);
 		for(int r = 0; r < result.row; r++){

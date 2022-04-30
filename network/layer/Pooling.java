@@ -1,6 +1,6 @@
 package neuralnet.network.layer;
 
-import neuralnet.algebra.matrix.Matrix;
+import neuralnet.algebra.Matrix;
 
 /**
 * Pooling Layer

@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import neuralnet.algebra.matrix.Matrix;
+import neuralnet.algebra.Matrix;
 import neuralnet.network.net.Net;
 
 /**

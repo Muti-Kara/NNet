@@ -1,6 +1,6 @@
 package neuralnet.network.layer;
 
-import neuralnet.algebra.matrix.Matrix;
+import neuralnet.algebra.Matrix;
 
 /**
 * Fully Connected Layer
@@ -37,7 +37,7 @@ public class FullyConnected extends Layer {
 			case SOFTMAX:
 				return new Matrix[]{ parameters[0].dot(input[0]).sum(parameters[1]).softmax() };
 			default:
-				return null;
+				return input;
 		}
 	}
 
