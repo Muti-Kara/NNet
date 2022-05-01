@@ -55,8 +55,8 @@ public abstract class Net implements Forwardable<Matrix> {
 	
 	@Override
 	public String toString() {
-		String str = "";
-		for(int i = 1; i < layers.size(); i++){
+		String str = layers.size() + "\n";
+		for(int i = 0; i < layers.size(); i++){
 			str += "\n" + layers.get(i).toString();
 		}
 		return str;

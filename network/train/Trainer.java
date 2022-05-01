@@ -14,7 +14,6 @@ public abstract class Trainer {
 	protected ArrayList<Integer> data = new ArrayList<>();
 	protected Matrix[] inputs, answers;
 	
-	protected double error = 0;
 	protected Net net;
 	
 	protected int dataPtr = 0;
@@ -43,20 +42,18 @@ public abstract class Trainer {
 	
 	public void train(int epoch, int stochastic, double rate, double momentum) {
 		for (int i = 0; i < epoch; i++) {
-			error = 0;
+			preStochastic(i, stochastic, momentum);
 			for (int j = 0; j < stochastic; j++) {
-				stochastic(i, j);
+				stochastic(j);
 			}
-			if(Double.isNaN(error))
-				return;
-			
-			apply(rate, momentum);
+			postStochastic(rate, momentum);
 		}
 	}
 	
-	public abstract void stochastic(int epoch, int stochastic);
-	public abstract void apply(double rate, double momentum);
-	public abstract void calculateError(Matrix answer);
+	
+	public abstract void preStochastic(int atEpoch, int stochastic, double momentum);
+	public abstract void stochastic(int at);
+	public abstract void postStochastic(double rate, double momentum);
 	
 	public void shuffleData() {
 		Collections.shuffle(data);

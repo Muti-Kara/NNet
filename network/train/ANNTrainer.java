@@ -9,6 +9,7 @@ import neuralnet.network.net.ANN;
 */
 public class ANNTrainer extends Trainer {
 	int length;
+	double error = 0;
 	
 	Matrix[] dW, dB; // change weight, bias
 	Matrix[] pW, pB; // previous changes
@@ -48,9 +49,14 @@ public class ANNTrainer extends Trainer {
 			);
 		}
 	}
+
+	@Override
+	public void preStochastic(int atEpoch, int stochastic, double momentum) {
+		error = 0;
+	}
 	
 	@Override
-	public void stochastic(int epoch, int stochastic) {
+	public void stochastic(int at) {
 		Matrix[] data = nextData();
 		forwardPropagate(data[0]);
 		calculateError(data[1]);
@@ -62,7 +68,10 @@ public class ANNTrainer extends Trainer {
 	 * Applies prefounded changes to parameters
 	 * */
 	@Override
-	public void apply(double rate, double momentum) {
+	public void postStochastic(double rate, double momentum) {
+		if(Double.isNaN(error))
+			return;
+		
 		System.out.printf("%.8f\n", error);
 		
 		for(int i = 1; i < length; i++){
@@ -86,7 +95,6 @@ public class ANNTrainer extends Trainer {
 	* @param datum
 	* @return error of network in ith data
 	 */
-	@Override
 	public void calculateError(Matrix answer) {
 		double crossEntropy = 0;
 		for(int i = 0; i < answer.getRow(); i++){
@@ -124,6 +132,10 @@ public class ANNTrainer extends Trainer {
 			dB[i].sum(er[i]);
 			dW[i].sum(er[i].dot(ac[i - 1].T()));
 		}
+	}
+	
+	public double getError() {
+		return error;
 	}
 
 }

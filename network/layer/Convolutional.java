@@ -13,8 +13,8 @@ public class Convolutional extends Layer {
 	* @param number of kernels
 	* @param kernels size
 	 */
-	public Convolutional(int ... layerDescriptor) {
-		super(layerDescriptor);
+	public Convolutional(int type, int ... layerDescriptor) {
+		super(type, layerDescriptor);
 		parameters = new Matrix[information[0] + 1];
 		parameters[information[0]] = new Matrix(information[0], 1);
 		for(int i = 0; i < information[0]; i++){
@@ -40,15 +40,6 @@ public class Convolutional extends Layer {
 			}
 		}
 		return ans;
-	}
-	
-	@Override
-	public Convolutional createClone() {
-		Convolutional convolutional = new Convolutional(information);
-		for(int i = 0; i < parameters.length; i++){
-			convolutional.setParameters(i, parameters[i].createClone());
-		}
-		return convolutional;
 	}
 	
 }

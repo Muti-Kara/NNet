@@ -16,8 +16,8 @@ public class FullyConnected extends Layer {
 	* @param next layers size
 	* @param activation type
 	 */
-	public FullyConnected(int ... layerDescriptor){
-		super(layerDescriptor);
+	public FullyConnected(int type, int ... layerDescriptor){
+		super(type, layerDescriptor);
 		parameters = new Matrix[2];
 		parameters[0] = new Matrix(information[1], information[0]);
 		parameters[1] = new Matrix(information[1], 1);
@@ -39,15 +39,6 @@ public class FullyConnected extends Layer {
 			default:
 				return input;
 		}
-	}
-
-	@Override
-	public FullyConnected createClone() {
-		FullyConnected fullyConnected = new FullyConnected(information);
-		for(int i = 0; i < parameters.length; i++){
-			fullyConnected.setParameters(i, parameters[i].createClone());
-		}
-		return fullyConnected;
 	}
 
 }

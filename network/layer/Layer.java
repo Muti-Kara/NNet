@@ -10,10 +10,12 @@ import neuralnet.network.Forwardable;
 * Layer
 */
 public abstract class Layer implements Forwardable<Matrix[]>{
-	int[] information;
+	public int[] information;
 	Matrix[] parameters;
+	int type;
 	
-	public Layer(int ... layerDescriptor) {
+	public Layer(int type, int ... layerDescriptor) {
+		this.type = type;
 		this.information = layerDescriptor;
 	}
 	
@@ -31,7 +33,13 @@ public abstract class Layer implements Forwardable<Matrix[]>{
 		this.parameters[index] = parameter;
 	}
 
-	public abstract Layer createClone();
+	public int size() {
+		return this.parameters.length;
+	}
+	
+	public int getType() {
+		return type;
+	}
 	
 	@Override
 	public void read(Scanner in) {
@@ -45,7 +53,7 @@ public abstract class Layer implements Forwardable<Matrix[]>{
 	
 	@Override
 	public String toString() {
-		String str = "";
+		String str = parameters.length + "\n";
 		for(int i = 0; i < parameters.length; i++){
 			str += parameters[i].toString() + "\n";
 		}

@@ -8,8 +8,9 @@ import neuralnet.algebra.Matrix;
 */
 public class Pooling extends Layer {
 	
-	public Pooling(int ... layerDescriptor) {
-		super(layerDescriptor);
+	public Pooling(int type, int ... layerDescriptor) {
+		super(type, layerDescriptor);
+		parameters = new Matrix[0];
 	}
 	
 	/**
@@ -38,9 +39,4 @@ public class Pooling extends Layer {
 		return ans;
 	}
 
-	@Override
-	public Pooling createClone() {
-		return new Pooling(information);
-	}
-	
 }
