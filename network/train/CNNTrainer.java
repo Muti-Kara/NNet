@@ -20,6 +20,7 @@ public class CNNTrainer extends Trainer {
 	int miniEpoch;
 	double miniRate;
 	double miniMomentum;
+	double miniRandomization;
 	
 	public CNNTrainer(CNN net, Matrix[] inputs, Matrix[] answers, double splitRatio) {
 		super(net, inputs, answers, splitRatio);
@@ -29,11 +30,12 @@ public class CNNTrainer extends Trainer {
 		}
 	}
 	
-	public void setMiniTrainer(int miniEpoch, int miniStochastic, double miniRate, double miniMomentum) {
+	public void setMiniTrainer(int miniEpoch, int miniStochastic, double miniRate, double miniMomentum, double miniRandomization) {
 		this.miniEpoch = miniEpoch;
 		this.miniStochastic = miniStochastic;
 		this.miniRate = miniRate;
 		this.miniMomentum = miniMomentum;
+		this.miniRandomization = miniRandomization;
 	}
 
 	@Override
@@ -78,11 +80,15 @@ public class CNNTrainer extends Trainer {
 			annInput[i] = gen[at].forwardPropagation( data[0] );
 			annAnswr[i] = data[1];
 		}
-		ann.addLayer(ANN.SOFTMAX, annInput[0].getRow(), answers[0].getRow());
-		ann.randomize(0.5);
+		ann.addLayer(ANN.INPUT, annInput[0].getRow());
+		ann.addLayer(ANN.SOFTMAX, answers[0].getRow());
+		ann.randomize(miniRandomization);
 		miniTrainer = new ANNTrainer(ann, annInput, annAnswr, 1);
 		miniTrainer.train(miniEpoch, miniStochastic, miniRate, miniMomentum);
 		errors[at] = miniTrainer.getError();
+		if (Double.isNaN(errors[at])) {
+			errors[at] = Double.MAX_VALUE;
+		}
 	}
 
 	@Override
@@ -99,17 +105,23 @@ public class CNNTrainer extends Trainer {
 				}
 			}
 		}
+		double avg = 0;
 		for (int i = 0; i < genSize; i++) {
 			System.out.print(errors[i] + ", ");
+			avg += errors[i];
 		}
 		System.out.println();
-		System.out.println(fr + ": " + errors[fr]);
-		System.out.println(sd + ": " + errors[sd]);
+		System.out.println("First: " + fr + ": " + errors[fr]);
+		System.out.println("Second: " + sd + ": " + errors[sd]);
+		System.out.println("Average: " + avg / genSize);
 		for (int i = 0; i < net.size(); i++) {
 			for (int j = 0; j < net.getLayer(i).size(); j++) {
 				father.getLayer(i).setParameters(j, gen[fr].getLayer(i).getParameters(j));
 				mother.getLayer(i).setParameters(j, gen[sd].getLayer(i).getParameters(j));
 			}
+		}
+		if (fr == sd) {
+			mother = (CNN) net;
 		}
 		net = father;
 	}

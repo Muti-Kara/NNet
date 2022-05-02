@@ -58,7 +58,7 @@ public class ANNTrainer extends Trainer {
 	@Override
 	public void stochastic(int at) {
 		Matrix[] data = nextData();
-		forwardPropagate(data[0]);
+		forwardPropagation(data[0]);
 		calculateError(data[1]);
 		calculateLoss();
 		calculateChanges();
@@ -69,8 +69,10 @@ public class ANNTrainer extends Trainer {
 	 * */
 	@Override
 	public void postStochastic(double rate, double momentum) {
-		if(Double.isNaN(error))
+		if(Double.isNaN(error)){
+			System.out.println("Invalid error value");
 			return;
+		}
 		
 		System.out.printf("%.8f\n", error);
 		
@@ -78,9 +80,10 @@ public class ANNTrainer extends Trainer {
 			net.getLayer(i).getParameters(0).sub(dW[i].sProd(rate));
 			net.getLayer(i).getParameters(1).sub(dB[i].sProd(rate));
 			
-			net.getLayer(i).getParameters(0).sub(pW[i].sProd(momentum));
-			net.getLayer(i).getParameters(1).sub(pB[i].sProd(momentum));
+			net.getLayer(i).getParameters(0).sub(pW[i].sProd(momentum/rate));
+			net.getLayer(i).getParameters(1).sub(pB[i].sProd(momentum/rate));
 		}
+		
 		for(int i = 1; i < length; i++) {
 			pW[i] = dW[i];
 			pB[i] = dB[i];
@@ -108,7 +111,7 @@ public class ANNTrainer extends Trainer {
 	* forward propagation for ith data
 	* @param datum
 	 */
-	public void forwardPropagate(Matrix input) {
+	public void forwardPropagation(Matrix input) {
 		ac[0] = input;
 		for(int i = 1; i < length; i++){
 			ac[i] = net.getLayer(i).forwardPropagation(new Matrix[]{ ac[i-1] })[0];

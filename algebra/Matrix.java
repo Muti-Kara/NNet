@@ -338,6 +338,12 @@ public class Matrix implements Learnable {
 	* @return resulting matrix
 	*/
 	public Matrix convolve(Matrix kernel) {
+		if (row <= kernel.row - 1 || col <= kernel.col - 1) {
+			System.out.println("Convolution error: ");
+			System.out.println("This: " + row + ", " + col);
+			System.out.println("Kernel: " + kernel.row + ", " + kernel.col);
+			return null;
+		}
 		Matrix result = new Matrix(row - kernel.row + 1, col - kernel.col + 1);
 		for(int r = 0; r < result.row; r++){
 			for(int c = 0; c < result.col; c++){

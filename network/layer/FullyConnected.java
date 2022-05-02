@@ -7,6 +7,7 @@ import neuralnet.algebra.Matrix;
 * @author Muti Kara
 */
 public class FullyConnected extends Layer {
+	public static final int INPUT = -1;
 	public final static int RELU = 0;
 	public final static int SOFTMAX = 1;
 	
@@ -32,6 +33,8 @@ public class FullyConnected extends Layer {
 	@Override
 	public Matrix[] forwardPropagation(Matrix[] input){
 		switch (information[2]) {
+			case INPUT:
+				return input;
 			case RELU:
 				return new Matrix[]{ parameters[0].dot(input[0]).sum(parameters[1]).relu() };
 			case SOFTMAX:

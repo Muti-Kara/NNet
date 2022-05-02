@@ -25,7 +25,7 @@ public class Pooling extends Layer {
 			ans[i] = new Matrix(input[i].getRow() / information[0] + 1, input[i].getCol() / information[0] + 1);
 			for(int r = 0; r < ans[i].getRow(); r++){
 				for(int c = 0; c < ans[i].getCol(); c++){
-					ans[i].set(r, c, -5e8);
+					ans[i].set(r, c, -1e8);
 				}
 			}
 			
