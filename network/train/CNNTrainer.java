@@ -1,8 +1,8 @@
-package neuralnet.network.train;
+package nnet.network.train;
 
-import neuralnet.algebra.Matrix;
-import neuralnet.network.net.ANN;
-import neuralnet.network.net.CNN;
+import nnet.algebra.Matrix;
+import nnet.network.net.ANN;
+import nnet.network.net.CNN;
 
 /**
 * CNNTrainer

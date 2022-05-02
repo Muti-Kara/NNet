@@ -1,6 +1,6 @@
-package neuralnet.network.net;
+package nnet.network.net;
 
-import neuralnet.network.layer.FullyConnected;
+import nnet.network.layer.FullyConnected;
 
 /**
  * A FC network

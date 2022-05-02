@@ -1,6 +1,6 @@
-package neuralnet.network;
+package nnet.network;
 
-import neuralnet.Learnable;
+import nnet.Learnable;
 
 /**
 * @author Muti Kara

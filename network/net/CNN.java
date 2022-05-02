@@ -1,7 +1,7 @@
-package neuralnet.network.net;
+package nnet.network.net;
 
-import neuralnet.network.layer.Convolutional;
-import neuralnet.network.layer.Pooling;
+import nnet.network.layer.Convolutional;
+import nnet.network.layer.Pooling;
 
 /**
 * A simple convolutional network

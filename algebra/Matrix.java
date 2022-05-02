@@ -1,10 +1,10 @@
-package neuralnet.algebra;
+package nnet.algebra;
 
 import java.io.FileWriter;
 import java.util.Random;
 import java.util.Scanner;
 
-import neuralnet.Learnable;
+import nnet.Learnable;
 
 /**
  * Matrix class for neural network

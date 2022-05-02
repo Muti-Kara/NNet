@@ -1,10 +1,10 @@
-package neuralnet.network.layer;
+package nnet.network.layer;
 
 import java.io.FileWriter;
 import java.util.Scanner;
 
-import neuralnet.algebra.Matrix;
-import neuralnet.network.Forwardable;
+import nnet.algebra.Matrix;
+import nnet.network.Forwardable;
 
 /**
 * Layer

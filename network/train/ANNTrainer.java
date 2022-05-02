@@ -1,7 +1,7 @@
-package neuralnet.network.train;
+package nnet.network.train;
 
-import neuralnet.algebra.Matrix;
-import neuralnet.network.net.ANN;
+import nnet.algebra.Matrix;
+import nnet.network.net.ANN;
 
 /**
 * NetworkTrainer

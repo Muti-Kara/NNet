@@ -1,6 +1,6 @@
-package neuralnet.network.layer;
+package nnet.network.layer;
 
-import neuralnet.algebra.Matrix;
+import nnet.algebra.Matrix;
 
 /**
 * Fully Connected Layer

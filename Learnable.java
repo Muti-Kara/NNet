@@ -1,4 +1,4 @@
-package neuralnet;
+package nnet;
 
 import java.io.FileWriter;
 import java.util.Scanner;

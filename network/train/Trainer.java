@@ -1,10 +1,10 @@
-package neuralnet.network.train;
+package nnet.network.train;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import neuralnet.algebra.Matrix;
-import neuralnet.network.net.Net;
+import nnet.algebra.Matrix;
+import nnet.network.net.Net;
 
 /**
 * @author Muti Kara

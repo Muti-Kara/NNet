@@ -1,11 +1,11 @@
-package neuralnet.network;
+package nnet.network;
 
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import neuralnet.algebra.Matrix;
-import neuralnet.network.net.Net;
+import nnet.algebra.Matrix;
+import nnet.network.net.Net;
 
 /**
 * A feed forward network.
