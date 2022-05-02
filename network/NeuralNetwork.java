@@ -38,7 +38,7 @@ public class NeuralNetwork implements Forwardable<Matrix> {
 	public String classify(double[][] input){
 		Matrix ans = forwardPropagation(new Matrix(input));
 		int max = 0;
-		for(int r = 0; r < ans.getRow(); r++)
+		for(int r = 0; r < ans.getRowNum(); r++)
 			if(ans.get(r, 0) > ans.get(max, 0))
 				max = r;
 		return (char) (max + 'A') + " " + ans.get(max, 0);

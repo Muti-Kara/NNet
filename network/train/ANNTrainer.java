@@ -5,6 +5,7 @@ import nnet.network.net.ANN;
 
 /**
 * NetworkTrainer
+* Uses backpropagation algorithm to train ANN's
 * @author Muti Kara
 */
 public class ANNTrainer extends Trainer {
@@ -16,9 +17,12 @@ public class ANNTrainer extends Trainer {
 	Matrix[] ac, er; // activation error
 	
 	/**
-	* Constructor takes a neural net input.
+	* Creates change (dW, dB), previous change (pW, pB), activation (ac), and error (er) matrices.
 	* @param net
-	 */
+	* @param inputs
+	* @param answers
+	* @param splitRatio
+	*/
 	public ANNTrainer(ANN net, Matrix[] inputs, Matrix[] answers, double splitRatio){
 		super(net, inputs, answers, splitRatio);
 		
@@ -32,20 +36,20 @@ public class ANNTrainer extends Trainer {
 		
 		for(int i = 1; i < length; i++){
 			dW[i] = new Matrix(
-				net.getLayer(i).getParameters(0).getRow(), 
-				net.getLayer(i).getParameters(0).getCol()
+				net.getLayer(i).getParameter(0).getRowNum(), 
+				net.getLayer(i).getParameter(0).getColNum()
 			);
 			dB[i] = new Matrix(
-				net.getLayer(i).getParameters(1).getRow(), 
-				net.getLayer(i).getParameters(1).getCol()
+				net.getLayer(i).getParameter(1).getRowNum(), 
+				net.getLayer(i).getParameter(1).getColNum()
 			);
 			pW[i] = new Matrix(
-				net.getLayer(i).getParameters(0).getRow(), 
-				net.getLayer(i).getParameters(0).getCol()
+				net.getLayer(i).getParameter(0).getRowNum(), 
+				net.getLayer(i).getParameter(0).getColNum()
 			);
 			pB[i] = new Matrix(
-				net.getLayer(i).getParameters(1).getRow(), 
-				net.getLayer(i).getParameters(1).getCol()
+				net.getLayer(i).getParameter(1).getRowNum(), 
+				net.getLayer(i).getParameter(1).getColNum()
 			);
 		}
 	}
@@ -55,6 +59,9 @@ public class ANNTrainer extends Trainer {
 		error = 0;
 	}
 	
+	/**
+	 * classic backpropagation algorithm
+	 * */
 	@Override
 	public void stochastic(int at) {
 		Matrix[] data = nextData();
@@ -77,30 +84,30 @@ public class ANNTrainer extends Trainer {
 		System.out.printf("%.8f\n", error);
 		
 		for(int i = 1; i < length; i++){
-			net.getLayer(i).getParameters(0).sub(dW[i].sProd(rate));
-			net.getLayer(i).getParameters(1).sub(dB[i].sProd(rate));
+			net.getLayer(i).getParameter(0).sub(dW[i].scalarProd(rate));
+			net.getLayer(i).getParameter(1).sub(dB[i].scalarProd(rate));
 			
-			net.getLayer(i).getParameters(0).sub(pW[i].sProd(momentum/rate));
-			net.getLayer(i).getParameters(1).sub(pB[i].sProd(momentum/rate));
+			net.getLayer(i).getParameter(0).sub(pW[i].scalarProd(momentum/rate));
+			net.getLayer(i).getParameter(1).sub(pB[i].scalarProd(momentum/rate));
 		}
 		
 		for(int i = 1; i < length; i++) {
 			pW[i] = dW[i];
 			pB[i] = dB[i];
 			
-			dW[i].sProd(0);
-			dB[i].sProd(0);
+			dW[i].scalarProd(0);
+			dB[i].scalarProd(0);
 		}
 	}
 
 	/**
 	* 
 	* @param datum
-	* @return error of network in ith data
+	* @return error of network according to given asnwer matrix
 	 */
 	public void calculateError(Matrix answer) {
 		double crossEntropy = 0;
-		for(int i = 0; i < answer.getRow(); i++){
+		for(int i = 0; i < answer.getRowNum(); i++){
 			crossEntropy -= answer.get(i, 0) * Math.log(ac[length - 1].get(i, 0));
 		}
 		er[length - 1] = ac[length - 1].sub(answer);
@@ -108,7 +115,7 @@ public class ANNTrainer extends Trainer {
 	}
 	
 	/**
-	* forward propagation for ith data
+	* forward propagation for given input matrix
 	* @param datum
 	 */
 	public void forwardPropagation(Matrix input) {
@@ -123,7 +130,7 @@ public class ANNTrainer extends Trainer {
 	 * */
 	public void calculateLoss(){
 		for(int i = length - 2; i > 0; i--){
-			er[i] = net.getLayer(i+1).getParameters(0).T().dot(er[i+1]);
+			er[i] = net.getLayer(i+1).getParameter(0).transpose().dot(er[i+1]);
 		}
 	}
 	
@@ -133,7 +140,7 @@ public class ANNTrainer extends Trainer {
 	public void calculateChanges() {
 		for(int i = 1; i < length; i++){
 			dB[i].sum(er[i]);
-			dW[i].sum(er[i].dot(ac[i - 1].T()));
+			dW[i].sum(er[i].dot(ac[i - 1].transpose()));
 		}
 	}
 	

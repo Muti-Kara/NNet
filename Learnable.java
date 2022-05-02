@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 /**
 * Learnable
+* An interface for learnable objects
+* @author Muti Kara
 */
 public interface Learnable {
 	public void read(Scanner in);

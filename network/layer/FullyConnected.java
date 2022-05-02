@@ -12,10 +12,12 @@ public class FullyConnected extends Layer {
 	public final static int SOFTMAX = 1;
 	
 	/**
-	* Constructor takes three parameters:
-	* @param previous layers size
-	* @param next layers size
-	* @param activation type
+	* Constructor takes two parameters:
+	* @param type 
+	* @param description of this layer:<br />
+	* 		number of neurons at previous layer<br />
+	* 		number of neurons at this layer<br />
+	* 		this layer's activation type (which is equals to type) <br />
 	 */
 	public FullyConnected(int type, int ... layerDescriptor){
 		super(type, layerDescriptor);
@@ -25,10 +27,9 @@ public class FullyConnected extends Layer {
 	}
 	
 	/**
-	* 
+	* checks activation type of layer and then propagates forward
 	* @param input
-	* @param softmax
-	* @return if softmax is true applies softmax activation otherwise applies ELU activation.
+	* @return resulting matrix in an one length matrix array
 	 */
 	@Override
 	public Matrix[] forwardPropagation(Matrix[] input){

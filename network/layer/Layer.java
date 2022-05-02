@@ -8,35 +8,66 @@ import nnet.network.Forwardable;
 
 /**
 * Layer
+* An abstract class for layer structures
+* @author Muti Kara
 */
 public abstract class Layer implements Forwardable<Matrix[]>{
 	public int[] information;
 	Matrix[] parameters;
 	int type;
 	
+	/**
+	* Takes one or more arguments. <br />
+	* First argument refers to this layer's type <br />
+	* Other arguments refers to this layer's properties
+	* @param type
+	* @param layerDescriptor
+	*/
 	public Layer(int type, int ... layerDescriptor) {
 		this.type = type;
 		this.information = layerDescriptor;
 	}
 	
+	/**
+	* Randomizes this layer
+	* @param rate
+	*/
 	public void randomize(double rate) {
 		for (int i = 0; i < parameters.length; i++) {
 			parameters[i].randomize(rate).abs();
 		}
 	}
 	
-	public Matrix getParameters(int index) {
+	/**
+	* 
+	* @param index
+	* @return parameter matrix with given index
+	*/
+	public Matrix getParameter(int index) {
 		return parameters[index];
 	}
 	
-	public void setParameters(int index, Matrix parameter) {
+	/**
+	* sets parameter matrix with given index
+	* @param index
+	* @param parameter
+	*/
+	public void setParameter(int index, Matrix parameter) {
 		this.parameters[index] = parameter;
 	}
 
+	/**
+	* 
+	* @return number of parameter matrices
+	*/
 	public int size() {
 		return this.parameters.length;
 	}
 	
+	/**
+	* 
+	* @return type of this layer
+	*/
 	public int getType() {
 		return type;
 	}

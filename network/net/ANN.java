@@ -3,7 +3,7 @@ package nnet.network.net;
 import nnet.network.layer.FullyConnected;
 
 /**
- * A FC network
+ * A Fully Connected network
  * @author Muti Kara
  * */
 public class ANN extends Net {
@@ -13,19 +13,13 @@ public class ANN extends Net {
 	
 	int previous = 0;
 	
+	/**
+	 * Overrides addLayer method.
+	 * */
 	@Override
 	public void addLayer(int type, int... layerDescriptor) {
 		layers.add(new FullyConnected(type, previous, layerDescriptor[0], type));
 		previous = layerDescriptor[0];
 	}
 	
-	@Override
-	public String toString() {
-		String str = (layers.size() - 1) + "\n";
-		for(int i = 1; i < layers.size(); i++){
-			str += "\n" + layers.get(i).toString();
-		}
-		return str;
-	}
-
 }

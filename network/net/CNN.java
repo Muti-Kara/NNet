@@ -1,7 +1,7 @@
 package nnet.network.net;
 
 import nnet.network.layer.Convolutional;
-import nnet.network.layer.Pooling;
+import nnet.network.layer.MaxPool;
 
 /**
 * A simple convolutional network
@@ -11,6 +11,9 @@ public class CNN extends Net {
 	public final static int CONVOLUTION = 0;
 	public final static int MAX_POOL = 1;
 	
+	/**
+	 * Overrides addLayer method
+	 * */
 	@Override
 	public void addLayer(int type, int ... layerDescriptor) {
 		switch (type) {
@@ -18,7 +21,7 @@ public class CNN extends Net {
 				layers.add(new Convolutional(type, layerDescriptor));
 				break;
 			case MAX_POOL:
-				layers.add(new Pooling(type, layerDescriptor));
+				layers.add(new MaxPool(type, layerDescriptor));
 				break;
 		}
 	}

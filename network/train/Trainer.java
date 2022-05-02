@@ -7,7 +7,11 @@ import nnet.algebra.Matrix;
 import nnet.network.net.Net;
 
 /**
-* @author Muti Kara
+ * A trainer class for training networks.
+ * This is an abstract class that provides funcitonality
+ * of getting inputs shuffling them and spliting them 
+ * into data, validation datasets.
+ * @author Muti Kara
 */
 public abstract class Trainer {
 	protected ArrayList<Integer> valid = new ArrayList<>();
@@ -19,7 +23,16 @@ public abstract class Trainer {
 	protected int dataPtr = 0;
 	protected int valPtr = 0;
 	
-	
+	/**
+	* Constructor takes a net for having a model, 
+	* a matrix array for inputs and another array 
+	* for answers, and a double value for splitting 
+	* training and validation data.
+	* @param net
+	* @param inputs
+	* @param answers
+	* @param splitRatio
+	*/
 	public Trainer(Net net, Matrix[] inputs, Matrix[] answers, double splitRatio) {
 		this.net = net;
 		this.inputs = inputs;
@@ -40,6 +53,16 @@ public abstract class Trainer {
 			valid.add(pointers.get(i));
 	}
 	
+	/**
+	* Training happens at three steps per epoch:
+	* 	pre stochastic
+	* 	during stochastic per data
+	* 	and post stochastic
+	* @param epoch
+	* @param stochastic
+	* @param rate
+	* @param momentum
+	*/
 	public void train(int epoch, int stochastic, double rate, double momentum) {
 		for (int i = 0; i < epoch; i++) {
 			preStochastic(i, stochastic, momentum);
@@ -50,15 +73,35 @@ public abstract class Trainer {
 		}
 	}
 	
-	
+	/**
+	* This abstract method will be called before iterating training data
+	* @param atEpoch
+	* @param stochastic
+	* @param momentum
+	*/
 	public abstract void preStochastic(int atEpoch, int stochastic, double momentum);
+	
+	/**
+	* This abstract method will be called during iteration of training data
+	* @param at
+	*/
 	public abstract void stochastic(int at);
+	
+	/**
+	* This abstract method will be called after iterating training data
+	* @param rate
+	* @param momentum
+	*/
 	public abstract void postStochastic(double rate, double momentum);
 	
 	public void shuffleData() {
 		Collections.shuffle(data);
 	}
 	
+	/**
+	* 
+	* @return matrix array of one input matrix and corresponding answer matrix
+	*/
 	public Matrix[] nextData() {
 		if (dataPtr == data.size()) {
 			dataPtr = 0;
@@ -67,6 +110,10 @@ public abstract class Trainer {
 		return new Matrix[]{ inputs[data.get(dataPtr++)], answers[data.get(dataPtr++)] };
 	}
 	
+	/**
+	* 
+	* @return matrix array of one input matrix and corresponding answer matrix
+	*/
 	public Matrix[] nextValid() {
 		if (valPtr == valid.size()) {
 			valPtr = 0;
@@ -74,6 +121,10 @@ public abstract class Trainer {
 		return new Matrix[]{ inputs[valid.get(valPtr++)], answers[valid.get(valPtr++)] };
 	}
 	
+	/**
+	* 
+	* @return best scored network
+	*/
 	public Net getBest() {
 		return net;
 	}

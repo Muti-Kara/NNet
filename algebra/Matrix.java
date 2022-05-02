@@ -7,7 +7,8 @@ import java.util.Scanner;
 import nnet.Learnable;
 
 /**
- * Matrix class for neural network
+ * Matrix class for neural network.
+ * This class includes spesific methods for neural networks.
  * @author Muti Kara
  * */
 public class Matrix implements Learnable {
@@ -36,7 +37,10 @@ public class Matrix implements Learnable {
 	}
 	
 	/**
-	* Generates new generation from given two matrix.
+	* Generates new generation from given two matrix.<br />
+	* It basically takes weighted average of father and mother 
+	* matrixes and adds a noise with strength of given mutation 
+	* parameter.
 	* @param father
 	* @param mother
 	* @param generationSize
@@ -47,8 +51,8 @@ public class Matrix implements Learnable {
 		Matrix[] gen = new Matrix[generationSize];
 		
 		for (int i = 0; i < generationSize; i++) {
-			Matrix fatCpy = father.createClone().sProd((double) i / (generationSize - 1));
-			Matrix motCpy = mother.createClone().sProd((double) (generationSize - i - 1) / (generationSize - 1));
+			Matrix fatCpy = father.clone().scalarProd((double) i / (generationSize - 1));
+			Matrix motCpy = mother.clone().scalarProd((double) (generationSize - i - 1) / (generationSize - 1));
 			gen[i] = new Matrix(father.row, father.col).randomize(mutation);
 			gen[i].sum(fatCpy).sum(motCpy);
 		}
@@ -68,7 +72,7 @@ public class Matrix implements Learnable {
 	}
 	
 	/**
-	* Creates a matrix object from given 2d array
+	* Creates a matrix object from given 2D double array
 	* @param matrix
 	*/
 	public Matrix(double[][] matrix) {
@@ -101,7 +105,7 @@ public class Matrix implements Learnable {
 	* 
 	* @return number of columns.
 	 */
-	public int getCol() {
+	public int getColNum() {
 		return col;
 	}
 
@@ -109,7 +113,7 @@ public class Matrix implements Learnable {
 	* 
 	* @return number of rows.
 	 */
-	public int getRow() {
+	public int getRowNum() {
 		return row;
 	}
 	
@@ -125,7 +129,7 @@ public class Matrix implements Learnable {
 	}
 	
 	/**
-	* 
+	* Uses gaussian distrubition.
 	* @return randomly fills the matrix.
 	 */
 	public Matrix randomize(double d) {
@@ -139,7 +143,7 @@ public class Matrix implements Learnable {
 	* 
 	* @return clones the matrix.
 	 */
-	public Matrix createClone() {
+	public Matrix clone() {
 		Matrix C = new Matrix(row, col);
 		for(int r = 0; r < row; r++) {
 			C.matrix[r] = matrix[r].clone();
@@ -149,33 +153,20 @@ public class Matrix implements Learnable {
 	
 	/**
 	* 
-	* @param row
-	* @return the row of matrix as a vector.
-	 */
-	public Matrix getVector(int row) {
-		Matrix C = new Matrix(col, 1);
-		for(int r = 0; r < C.row; r++) {
-			C.matrix[r][0] = matrix[row][r];
-		}
-		return C;
-	}
-	
-	/**
-	* 
-	* @param B
+	* @param other
 	* @return dot product of matrices.
 	 */
-	public Matrix dot(Matrix B) {
-		if(this.col != B.row) {
-			System.out.println("Matrix dot error. Size Mismatch :" + col + " " + B.row);
+	public Matrix dot(Matrix other) {
+		if(this.col != other.row) {
+			System.out.println("Matrix dot error. Size Mismatch :" + col + " " + other.row);
 			return null;
 		}
-		Matrix C = new Matrix(this.row, B.col);
+		Matrix C = new Matrix(this.row, other.col);
 		for(int crow = 0; crow < this.row; crow++) {
-			for(int ccol = 0; ccol < B.col; ccol++) {
+			for(int ccol = 0; ccol < other.col; ccol++) {
 				double c = 0;
 				for(int sum = 0; sum < this.col; sum++) {
-					c += matrix[crow][sum] * B.matrix[sum][ccol];
+					c += matrix[crow][sum] * other.matrix[sum][ccol];
 				}
 				C.matrix[crow][ccol] = c;
 			}
@@ -186,19 +177,19 @@ public class Matrix implements Learnable {
 	/**
 	* Summarizes two matrices element wise.
 	* It happens in place. For convenience it returns this matrix.
-	* @param B
+	* @param other
 	* @return this
 	 */
-	public Matrix sum(Matrix B) {
-		if(!(row == B.row && col == B.col)) {
+	public Matrix sum(Matrix other) {
+		if(!(row == other.row && col == other.col)) {
 			System.out.println("Matrix sum error. Size Mismatch.");
-			System.out.println("Row1: " + row + "\tRow2: " + B.row);
-			System.out.println("Col1: " + col + "\tCol2: " + B.col);
+			System.out.println("Row1: " + row + "\tRow2: " + other.row);
+			System.out.println("Col1: " + col + "\tCol2: " + other.col);
 			return null;
 		}
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
-				matrix[r][c] += B.matrix[r][c];
+				matrix[r][c] += other.matrix[r][c];
 			}
 		}
 		return this;
@@ -207,35 +198,17 @@ public class Matrix implements Learnable {
 	/**
 	* Subtracts two matrices element wise.
 	* It happens in place. For convenience it returns this matrix.
-	* @param B
+	* @param other
 	* @return this
 	 */
-	public Matrix sub(Matrix B) {
-		if(!(row == B.row && col == B.col)) {
+	public Matrix sub(Matrix other) {
+		if(!(row == other.row && col == other.col)) {
 			System.out.println("Matrix sub error. Size Mismatch.");
 			return null;
 		}
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
-				matrix[r][c] -= B.matrix[r][c];
-			}
-		}
-		return this;
-	}
-	
-	/**
-	* Multiplies two matrices element wise.
-	* It happens in place. For convenience it returns this matrix.
-	* @param B
-	* @return this
-	 */
-	public Matrix ewProd(Matrix B) {
-		if(!(row == B.row && col == B.col)) {
-			System.out.println("Matrix exProd error. Size Mismatch.");
-		}
-		for(int r = 0; r < row; r++) {
-			for(int c = 0; c < col; c++) {
-				matrix[r][c] *= B.matrix[r][c];
+				matrix[r][c] -= other.matrix[r][c];
 			}
 		}
 		return this;
@@ -247,10 +220,10 @@ public class Matrix implements Learnable {
 	* @param B
 	* @return this
 	 */
-	public Matrix sProd(double b) {
+	public Matrix scalarProd(double scalar) {
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
-				matrix[r][c] *= b;
+				matrix[r][c] *= scalar;
 			}
 		}
 		return this;
@@ -262,10 +235,10 @@ public class Matrix implements Learnable {
 	* @param B
 	* @return this
 	 */
-	public Matrix sSum(double b) {
+	public Matrix scalarSum(double scalar) {
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
-				matrix[r][c] += b;
+				matrix[r][c] += scalar;
 			}
 		}
 		return this;
@@ -275,7 +248,7 @@ public class Matrix implements Learnable {
 	* 
 	* @return transpose of this matrix.
 	 */
-	public Matrix T() {
+	public Matrix transpose() {
 		Matrix C = new Matrix(col, row);
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
@@ -304,7 +277,7 @@ public class Matrix implements Learnable {
 	* @param matrix
 	* @return matrix itself
 	 */
-	public Matrix d_relu() {
+	public Matrix dRelu() {
 		for(int r = 0; r < row; r++) {
 			for(int c = 0; c < col; c++) {
 				matrix[r][c] = (matrix[r][c] <= 0)? 0 : 1;
@@ -314,9 +287,8 @@ public class Matrix implements Learnable {
 	}
 	
 	/**
-	* Applies Softmax function to vector.
-	* @param vector
-	* @return vector itself
+	* Applies Softmax function to this vector.
+	* @return this
 	 */
 	public Matrix softmax(){
 		double sum = 0;

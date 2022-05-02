@@ -51,7 +51,7 @@ public class Main {
 			char character = fileNames.get(i).charAt(fileNames.get(i).length() - 1);
 			MyImage img = MyImageIO.read(folderName + character + "/" + file);
 			img = img.resize(49, 49);
-			inputs[i] = new Matrix(img.convertToDouble2D()).sProd(0.002);
+			inputs[i] = new Matrix(img.convertToDouble2D()).scalarProd(0.002);
 			answers[i] = new Matrix(26, 1);
 			answers[i].set(character - 'A', 0, 1);
 		}
