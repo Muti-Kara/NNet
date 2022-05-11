@@ -1,3 +1,5 @@
+package nnet;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -5,7 +7,6 @@ import java.util.ArrayList;
 import dip.data.MyImage;
 import dip.io.MyImageIO;
 import nnet.algebra.Matrix;
-import nnet.network.net.ANN;
 import nnet.network.net.CNN;
 import nnet.network.train.CNNTrainer;
 

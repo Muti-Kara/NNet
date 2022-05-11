@@ -5,31 +5,33 @@ import nnet.network.net.ANN;
 import nnet.network.net.CNN;
 
 /**
-* CNNTrainer
-* Uses genetic algorithm to train CNN's
-* @author Muti Kara
-*/
+ * CNNTrainer
+ * Uses genetic algorithm to train CNN's
+ * 
+ * @author Muti Kara
+ */
 public class CNNTrainer extends Trainer {
 	CNN[] gen;
 	CNN father = new CNN();
 	CNN mother = new CNN();
 	double[] errors;
 	int genSize;
-	
+
 	ANNTrainer miniTrainer;
 	int miniStochastic;
 	int miniEpoch;
 	double miniRate;
 	double miniMomentum;
 	double miniRandomization;
-	
+
 	/**
-	* Sets father and mother networks with given model
-	* @param net
-	* @param inputs
-	* @param answers
-	* @param splitRatio
-	*/
+	 * Sets father and mother networks with given model
+	 * 
+	 * @param net
+	 * @param inputs
+	 * @param answers
+	 * @param splitRatio
+	 */
 	public CNNTrainer(CNN net, Matrix[] inputs, Matrix[] answers, double splitRatio) {
 		super(net, inputs, answers, splitRatio);
 		for (int i = 0; i < net.size(); i++) {
@@ -37,16 +39,18 @@ public class CNNTrainer extends Trainer {
 			mother.addLayer(net.getLayer(i).getType(), net.getLayer(i).information);
 		}
 	}
-	
+
 	/**
-	* Sets the simple ANN that will be trained.
-	* @param miniEpoch
-	* @param miniStochastic
-	* @param miniRate
-	* @param miniMomentum
-	* @param miniRandomization
-	*/
-	public void setMiniTrainer(int miniEpoch, int miniStochastic, double miniRate, double miniMomentum, double miniRandomization) {
+	 * Sets the simple ANN that will be trained.
+	 * 
+	 * @param miniEpoch
+	 * @param miniStochastic
+	 * @param miniRate
+	 * @param miniMomentum
+	 * @param miniRandomization
+	 */
+	public void setMiniTrainer(int miniEpoch, int miniStochastic, double miniRate, double miniMomentum,
+			double miniRandomization) {
 		this.miniEpoch = miniEpoch;
 		this.miniStochastic = miniStochastic;
 		this.miniRate = miniRate;
@@ -56,7 +60,7 @@ public class CNNTrainer extends Trainer {
 
 	/**
 	 * Generates new generation.
-	 * */
+	 */
 	@Override
 	public void preStochastic(int atEpoch, int genSize, double mutation) {
 		System.out.println("EPOCH: " + atEpoch);
@@ -76,7 +80,8 @@ public class CNNTrainer extends Trainer {
 			for (int i = 0; i < net.size(); i++) {
 				breed[i] = new Matrix[net.getLayer(i).size()][];
 				for (int j = 0; j < net.getLayer(i).size(); j++) {
-					breed[i][j] = Matrix.breed(father.getLayer(i).getParameter(j), mother.getLayer(i).getParameter(j), genSize, mutation);
+					breed[i][j] = Matrix.breed(father.getLayer(i).getParameter(j), mother.getLayer(i).getParameter(j),
+							genSize, mutation);
 				}
 			}
 			for (int k = 0; k < genSize; k++) {
@@ -88,10 +93,10 @@ public class CNNTrainer extends Trainer {
 			}
 		}
 	}
-	
+
 	/**
 	 * Tries every candidate CNN by appending a single layer ANN and training it.
-	 * */
+	 */
 	@Override
 	public void stochastic(int at) {
 		ANN ann = new ANN();
@@ -99,7 +104,7 @@ public class CNNTrainer extends Trainer {
 		Matrix[] annAnswr = new Matrix[miniStochastic];
 		for (int i = 0; i < miniStochastic; i++) {
 			Matrix[] data = nextData();
-			annInput[i] = gen[at].forwardPropagation( data[0] );
+			annInput[i] = gen[at].forwardPropagation(data[0]);
 			annAnswr[i] = data[1];
 		}
 		ann.addLayer(ANN.INPUT, annInput[0].getRowNum());
@@ -115,7 +120,7 @@ public class CNNTrainer extends Trainer {
 
 	/**
 	 * Chooses best two CNN to generate next generation
-	 * */
+	 */
 	@Override
 	public void postStochastic(double rate, double momentum) {
 		int fr = 0;

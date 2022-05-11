@@ -81,7 +81,7 @@ public class ANNTrainer extends Trainer {
 			return;
 		}
 		
-		System.out.printf("%.8f\n", error);
+		// System.out.printf("%.8f\n", error);
 		
 		for(int i = 1; i < length; i++){
 			net.getLayer(i).getParameter(0).sub(dW[i].scalarProd(rate));
@@ -130,7 +130,7 @@ public class ANNTrainer extends Trainer {
 	 * */
 	public void calculateLoss(){
 		for(int i = length - 2; i > 0; i--){
-			er[i] = net.getLayer(i+1).getParameter(0).transpose().dot(er[i+1]);
+			er[i] = net.getLayer(i+1).getParameter(0).transpose().dot(er[i+1].dRelu());
 		}
 	}
 	

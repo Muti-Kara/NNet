@@ -74,12 +74,16 @@ public abstract class Layer implements Forwardable<Matrix[]>{
 	
 	@Override
 	public void read(Scanner in) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < parameters.length; i++) {
+			parameters[i].read(in);
+		}
 	}
 
 	@Override
 	public void write(FileWriter out) {
-		// TODO Auto-generated method stub
+		for (Matrix parameter : parameters) {
+			parameter.write(out);
+		}
 	}
 	
 	@Override

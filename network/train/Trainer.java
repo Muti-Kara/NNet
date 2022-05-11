@@ -107,7 +107,7 @@ public abstract class Trainer {
 			dataPtr = 0;
 			shuffleData();
 		}
-		return new Matrix[]{ inputs[data.get(dataPtr++)], answers[data.get(dataPtr++)] };
+		return new Matrix[]{ inputs[data.get(dataPtr)], answers[data.get(dataPtr++)] };
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public abstract class Trainer {
 		if (valPtr == valid.size()) {
 			valPtr = 0;
 		}
-		return new Matrix[]{ inputs[valid.get(valPtr++)], answers[valid.get(valPtr++)] };
+		return new Matrix[]{ inputs[valid.get(valPtr)], answers[valid.get(valPtr++)] };
 	}
 	
 	/**

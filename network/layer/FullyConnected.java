@@ -18,9 +18,13 @@ public class FullyConnected extends Layer {
 	* 		number of neurons at previous layer<br />
 	* 		number of neurons at this layer<br />
 	* 		this layer's activation type (which is equals to type) <br />
-	 */
+	*/
 	public FullyConnected(int type, int ... layerDescriptor){
 		super(type, layerDescriptor);
+		if (information[2] == INPUT) {
+			parameters = new Matrix[0];
+			return;
+		}
 		parameters = new Matrix[2];
 		parameters[0] = new Matrix(information[1], information[0]);
 		parameters[1] = new Matrix(information[1], 1);

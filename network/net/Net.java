@@ -62,12 +62,16 @@ public abstract class Net implements Forwardable<Matrix> {
 	
 	@Override
 	public void read(Scanner in) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < layers.size(); i++) {
+			layers.get(i).read(in);
+		}
 	}
 	
 	@Override
 	public void write(FileWriter out) {
-		// TODO Auto-generated method stub
+		for (Layer layer : layers) {
+			layer.write(out);
+		}
 	}
 	
 	@Override

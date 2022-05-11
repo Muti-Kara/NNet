@@ -41,7 +41,7 @@ public class NeuralNetwork implements Forwardable<Matrix> {
 		for(int r = 0; r < ans.getRowNum(); r++)
 			if(ans.get(r, 0) > ans.get(max, 0))
 				max = r;
-		return (char) (max + 'A') + " " + ans.get(max, 0);
+		return (char) (max + 'A') + " ";// + ans.get(max, 0);
 	}
 	
 	@Override

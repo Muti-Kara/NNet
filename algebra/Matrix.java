@@ -342,14 +342,18 @@ public class Matrix implements Learnable {
 
 	@Override
 	public void read(Scanner in) {
-		// TODO Auto-generated method stub
-		
+		for(int r = 0; r < row; r++)
+			for(int c = 0; c < col; c++)
+				matrix[r][c] = in.nextDouble();
 	}
 
 	@Override
 	public void write(FileWriter out) {
-		// TODO Auto-generated method stub
-		
+		try {
+			out.append(this.toString());
+		} catch (Exception e) {
+			System.out.println("Error while writing matrix");
+		}
 	}
 	
 }
